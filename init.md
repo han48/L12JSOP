@@ -16,6 +16,7 @@ composer install && npm install && npm run build
 ## Publish vendor
 
 ```shell
+php artisan stub:publish
 php artisan vendor:publish --all
 ```
 
@@ -27,3 +28,9 @@ php artisan jetstream:install inertia
 ```
 
 ## Install orchid platform
+
+```shell
+composer require orchid/platform
+php artisan orchid:install
+php artisan orchid:admin
+```
