@@ -85,6 +85,13 @@ const submit = () => {
                     Log in
                 </PrimaryButton>
             </div>
+            <hr class="border-t border-gray-300 my-4 w-100 mx-auto">
+            <div class="flex items-center justify-center mt-4">
+
+                <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Don't have any account?
+                </Link>
+            </div>
         </form>
     </AuthenticationCard>
 </template>
