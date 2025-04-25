@@ -35,6 +35,12 @@ php artisan orchid:install
 php artisan orchid:admin
 ```
 
+## Support two-factor authentication
+
+```shell
+composer require orchid/fortify
+```
+
 ## Clear cache
 
 ```shell

@@ -20,6 +20,9 @@ use Orchid\Support\Facades\Toast;
 
 class UserProfileScreen extends Screen
 {
+
+    use \App\Traits\TwoFactorScreenAuthenticatable;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -67,6 +70,8 @@ class UserProfileScreen extends Screen
                 ->novalidate()
                 ->icon('bs.box-arrow-left')
                 ->route('platform.logout'),
+
+            $this->twoFactorCommandBar(),
         ];
     }
 
@@ -95,6 +100,8 @@ class UserProfileScreen extends Screen
                         ->icon('bs.check-circle')
                         ->method('changePassword')
                 ),
+
+            $this->twoFactorLayout(),
         ];
     }
 

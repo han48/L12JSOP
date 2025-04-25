@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "894c58be55f3e53663a0d28dfce0f37f",
+    "content-hash": "4e35e7f23dd8c7fd835f0086350fc04b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3166,6 +3166,78 @@
                 }
             ],
             "time": "2025-02-25T18:35:59+00:00"
+        },
+        {
+            "name": "orchid/fortify",
+            "version": "0.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orchidsoftware/fortify.git",
+                "reference": "f6c47e350367f243225e8c0a9e946601c07e0651"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orchidsoftware/fortify/zipball/f6c47e350367f243225e8c0a9e946601c07e0651",
+                "reference": "f6c47e350367f243225e8c0a9e946601c07e0651",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/fortify": "^1.16",
+                "orchid/platform": "^14.0"
+            },
+            "conflict": {
+                "laravel/fortify": "<1.16.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0",
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Orchid\\Fortify\\AuthServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orchid\\Fortify\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Chernyaev",
+                    "email": "bliz48rus@gmail.com",
+                    "homepage": "http://orchid.software/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Orchid template for Laravel Fortify",
+            "homepage": "https://github.com/orchid/fortify",
+            "keywords": [
+                "fortify",
+                "orchid"
+            ],
+            "support": {
+                "issues": "https://github.com/orchidsoftware/fortify/issues",
+                "source": "https://github.com/orchidsoftware/fortify/tree/0.0.12"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/orchidsoftware",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/orchid",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2023-05-26T16:20:40+00:00"
         },
         {
             "name": "orchid/platform",
