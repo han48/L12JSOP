@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { toast } from 'vue3-toastify';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { BellIcon } from '@heroicons/vue/24/solid'
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -13,6 +15,8 @@ defineProps({
 });
 
 const showingNavigationDropdown = ref(false);
+const newNotifications = ref([]);
+const hasNextNotifications = ref(null)
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -25,6 +29,48 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+const fetchNotifications = () => {
+    axios.get('/notifications/unread')
+        .then(res => {
+            hasNextNotifications.value = res.data.data.prev_page_url;
+            newNotifications.value = res.data.data.data;
+        })
+        .catch(err => {
+            console.error(err);
+        });
+};
+
+const markNotification = (id) => {
+    axios.post('/notifications/maskNotification', {
+        id: id,
+    })
+        .then(res => {
+            const action = res.data.action;
+            if (undefined !== action && null !== action) {
+                window.location.href = action;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+const markReadAll = () => {
+    axios.post('/notifications/markAllAsRead')
+        .then(res => {
+            const message = res.data.message;
+            toast.success(message, { autoClose: 1500 })
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+onMounted (() => {
+    fetchNotifications();
+});
+
 </script>
 
 <template>
@@ -109,6 +155,38 @@ const logout = () => {
                                                 </template>
                                             </template>
                                         </div>
+                                    </template>
+                                </Dropdown>
+                            </div>
+
+                            <!-- Notification Alert -->
+                            <div v-if="newNotifications.length > 0" class="relative inline-block cursor-pointer">
+                                <Dropdown align="right" width="96">
+                                    <template #trigger>
+                                        <BellIcon class="h-7 w-7 text-gray-600" />
+                                        <span class="absolute bottom-3 left-3 flex items-center justify-center h-5 w-5 rounded-full bg-red-600 text-white text-xs">
+                                            {{ newNotifications.length }}
+                                        </span>
+                                    </template>
+                                    <template #content>
+                                        <!-- Account Management -->
+                                        <div class="block px-4 py-2 text-xs text-gray-400 w-[350px]">
+                                            Notifications
+                                        </div>
+
+                                        <div class="border-t border-gray-200" />
+
+                                        <div v-for="(notification, index) in newNotifications" :key="index">
+                                            <DropdownLink @click="markNotification(notification.id)">
+                                                <div class="block text-xs">{{ notification.data.title }}</div>
+                                                <div>{{ notification.data.message }}</div>
+                                            </DropdownLink>
+
+                                            <div class="border-t border-gray-200" />
+                                        </div>
+                                        <DropdownLink @click="markReadAll()">
+                                            <div class="block text-center">Mark all as read.</div>
+                                        </DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
