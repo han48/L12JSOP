@@ -11,6 +11,11 @@ use Orchid\Screen\Actions\Menu;
 class Base
 {
     /**
+     * Icon
+     */
+    protected $icon = 'bs.gear';
+
+    /**
      * Get base object name
      */
     public function GetBaseName()
@@ -57,7 +62,7 @@ class Base
         $display_name = Str::ucfirst(Str::plural(Str::snake($base_name, ' ')));
         $adminMenu = [
             Menu::make(__($display_name))
-                ->icon('bs.people')
+                ->icon($this->icon)
                 ->route('platform.systems.' . $menu_name)
                 ->permission('platform.systems.' . $menu_name),
         ];

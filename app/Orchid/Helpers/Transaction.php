@@ -2,10 +2,10 @@
 
 namespace App\Orchid\Helpers;
 
-class Team extends Base 
+class Transaction extends Base 
 {
     /**
      * Icon
      */
-    protected $icon = 'bs.diagram-2';
+    protected $icon = 'bs.cash';
 }
