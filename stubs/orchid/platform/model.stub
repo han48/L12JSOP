@@ -4,4 +4,7 @@ namespace App\Models;
 
 class {{ class }} extends Base
 {
+    // Use \Illuminate\Database\Eloquent\SoftDeletes;
+
+    protected $table = '{{ table }}';
 }
