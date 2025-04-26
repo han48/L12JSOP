@@ -182,8 +182,11 @@ class ManagementCreate extends Command
             $ids = $this->ask('Please enter user id (values separated by commas [,])', 1);
             $ids = explode(",", $ids);
             $users = User::whereIn('id', $ids)->get();
+            $permission = 'platform.systems.' . $table;
             foreach ($users as $user) {
-                // TODO Give permission to user
+                $permissions = $user->permissions;
+                $permissions[$permission] = true;
+                $user->forceFill(['permissions' => $permissions])->save();
             }
         }
     }
