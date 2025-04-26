@@ -106,6 +106,7 @@ class PlatformProvider extends OrchidServiceProvider
 
         $menu = array_merge($menu, $adminMenu);
 
+        $menu = (new \App\Orchid\Helpers\Team)->AddMenus($menu);
         // $menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus($menu);
 
         $menu = array_merge($menu, $devMenu);
@@ -124,6 +125,7 @@ class PlatformProvider extends OrchidServiceProvider
         $permissions = $permissions->addPermission('platform.systems.roles', __('Roles'));
         $permissions = $permissions->addPermission('platform.systems.users', __('Users'));
 
+        $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
         // $permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions($permissions);
 
         return [

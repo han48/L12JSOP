@@ -126,11 +126,16 @@ class BaseEditScreen extends BaseScreen
      *
      * @return array
      */
-    public function query($id): iterable
+    public function query($id = null): iterable
     {
+
         $base_name = $this->GetBaseName();
         $class_name = "\App\Models\\" . $base_name;
-        $object = $class_name::find($id);
+        if (isset($id)) {
+            $object = $class_name::find($id);
+        } else {
+            $object = new $class_name();   
+        }
         $this->object = $object;
         return [
             Str::lower($base_name) => $object,
