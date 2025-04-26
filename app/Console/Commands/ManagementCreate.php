@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
@@ -125,45 +126,65 @@ class ManagementCreate extends Command
             }
         }
 
-        $this->info("Insert menu and permission...");
-        $platform_provider_path = "app/Orchid/PlatformProvider.php";
-        if (!file_exists($platform_provider_path)) {
-            $this->info("=> PlatformProvider is not exist!");
-        } else {
-            $keyword_permission = "        // \$permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions(\$permissions);";
-            $keyword_menu = "        // \$menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus(\$menu);";
-            $permissions = $keyword_permission;
-            $permissions = Str::replace("// ", "", $permissions);
-            $permissions = Str::replace("{{ class }}", ucfirst($name), $permissions);
-            $menu = $keyword_menu;
-            $menu = Str::replace("// ", "", $menu);
-            $menu = Str::replace("{{ class }}", ucfirst($name), $menu);
+        $allow = filter_var($this->ask('Do you want to add menu and permission? (yes/no)', "yes"), FILTER_VALIDATE_BOOLEAN);
+        if ($allow) {
+            $this->info("Insert menu and permission...");
+            $platform_provider_path = "app/Orchid/PlatformProvider.php";
+            if (!file_exists($platform_provider_path)) {
+                $this->info("=> PlatformProvider is not exist!");
+            } else {
+                $keyword_permission = "        // \$permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions(\$permissions);";
+                $keyword_menu = "        // \$menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus(\$menu);";
+                $permissions = $keyword_permission;
+                $permissions = Str::replace("// ", "", $permissions);
+                $permissions = Str::replace("{{ class }}", ucfirst($name), $permissions);
+                $menu = $keyword_menu;
+                $menu = Str::replace("// ", "", $menu);
+                $menu = Str::replace("{{ class }}", ucfirst($name), $menu);
 
-            $fileContents = file_get_contents($platform_provider_path);
-            $modifiedContents = $fileContents;
-            $modifiedContents = str_replace($keyword_permission, $permissions . PHP_EOL . $keyword_permission, $modifiedContents);
-            $modifiedContents = str_replace($keyword_menu, $menu . PHP_EOL . $keyword_menu, $modifiedContents);
-            file_put_contents($platform_provider_path, $modifiedContents);
+                $fileContents = file_get_contents($platform_provider_path);
+                $modifiedContents = $fileContents;
+                $modifiedContents = str_replace($keyword_permission, $permissions . PHP_EOL . $keyword_permission, $modifiedContents);
+                $modifiedContents = str_replace($keyword_menu, $menu . PHP_EOL . $keyword_menu, $modifiedContents);
+                file_put_contents($platform_provider_path, $modifiedContents);
 
-            $this->info("=> $permissions");
-            $this->info("=> $menu");
+                $this->info("=> $permissions");
+                $this->info("=> $menu");
+            }
         }
 
-        $this->info("Insert router...");
-        $route_path = "routes/platform.php";
-        if (!file_exists($route_path)) {
-            $this->info("=> routes/platform is not exist!");
-        } else {
-            $keyword_route = "// (new App\Orchid\Helpers\{{ class }}())->AddRoute();";
-            $route = $keyword_route;
-            $route = Str::replace("// ", "", $route);
-            $route = Str::replace("{{ class }}", ucfirst($name), $route);
+        $allow = filter_var($this->ask('Do you want to add router? (yes/no)', "yes"), FILTER_VALIDATE_BOOLEAN);
+        if ($allow) {
+            $this->info("Insert router...");
+            $route_path = "routes/platform.php";
+            if (!file_exists($route_path)) {
+                $this->info("=> routes/platform is not exist!");
+            } else {
+                $keyword_route = "// (new App\Orchid\Helpers\{{ class }}())->AddRoute();";
+                $route = $keyword_route;
+                $route = Str::replace("// ", "", $route);
+                $route = Str::replace("{{ class }}", ucfirst($name), $route);
 
-            $fileContents = file_get_contents($route_path);
-            $modifiedContents = str_replace($keyword_route, $route . PHP_EOL . $keyword_route, $fileContents);
-            file_put_contents($route_path, $modifiedContents);
+                $fileContents = file_get_contents($route_path);
+                $modifiedContents = str_replace($keyword_route, $route . PHP_EOL . $keyword_route, $fileContents);
+                file_put_contents($route_path, $modifiedContents);
 
-            $this->info("=> $route");
+                $this->info("=> $route");
+            }
+        }
+
+        $allow = filter_var($this->ask('Add permission for user? (yes/no)', "yes"), FILTER_VALIDATE_BOOLEAN);
+        if ($allow) {
+            $users = User::all();
+            foreach ($users as $user) {
+                $this->info("[$user->id] $user->name ($user->email)");
+            }
+            $ids = $this->ask('Please enter user id (values separated by commas [,])', 1);
+            $ids = explode(",", $ids);
+            $users = User::whereIn('id', $ids)->get();
+            foreach ($users as $user) {
+                // TODO Give permission to user
+            }
         }
     }
 }
