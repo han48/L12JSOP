@@ -1,0 +1,7 @@
+<?php
+
+namespace App\Orchid\Screens\{{ class }};
+
+use App\Orchid\Screens\BaseEditScreen;
+
+class {{ class }}EditScreen extends BaseEditScreen {}

@@ -1,0 +1,7 @@
+<?php
+
+namespace App\Orchid\Layouts\{{ class }};
+
+use App\Orchid\Layouts\BaseListLayout;
+
+class {{ class }}ListLayout extends BaseListLayout {}

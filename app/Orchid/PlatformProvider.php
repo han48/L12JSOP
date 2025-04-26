@@ -35,10 +35,11 @@ class PlatformProvider extends OrchidServiceProvider
     {
         $menu = [];
         if (true === filter_var(env('DEV_MODE', false), FILTER_VALIDATE_BOOLEAN)) {
-            $menu = [
+            $devMenu = [
+                Menu::make('')->title('Navigation'),
+
                 Menu::make('Get Started')
                     ->icon('bs.book')
-                    ->title('Navigation')
                     ->route(config('platform.index')),
 
                 Menu::make('Sample Screen')
@@ -68,8 +69,9 @@ class PlatformProvider extends OrchidServiceProvider
                     ->route('platform.example.cards')
                     ->divider(),
 
+                Menu::make('')->title('Docs'),
+
                 Menu::make('Documentation')
-                    ->title('Docs')
                     ->icon('bs.box-arrow-up-right')
                     ->url('https://orchid.software/en/docs')
                     ->target('_blank'),
@@ -79,24 +81,34 @@ class PlatformProvider extends OrchidServiceProvider
                     ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
                     ->target('_blank')
                     ->badge(fn() => Dashboard::version(), Color::DARK),
+
+                Menu::make('')->divider(),
             ];
+        } else {
+            $devMenu = [];
         }
 
         $adminMenu = [
+            Menu::make('')->title(__('Access Controls')),
+
             Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')
-                ->permission('platform.systems.users')
-                ->title(__('Access Controls')),
+                ->permission('platform.systems.users'),
 
             Menu::make(__('Roles'))
                 ->icon('bs.shield')
                 ->route('platform.systems.roles')
-                ->permission('platform.systems.roles')
-                ->divider(),
+                ->permission('platform.systems.roles'),
+
+            Menu::make('')->title(__('Management')),
         ];
 
         $menu = array_merge($menu, $adminMenu);
+
+        // $menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus($menu);
+
+        $menu = array_merge($menu, $devMenu);
 
         return $menu;
     }
@@ -108,10 +120,14 @@ class PlatformProvider extends OrchidServiceProvider
      */
     public function permissions(): array
     {
+        $permissions = ItemPermission::group(__('System'));
+        $permissions = $permissions->addPermission('platform.systems.roles', __('Roles'));
+        $permissions = $permissions->addPermission('platform.systems.users', __('Users'));
+
+        // $permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions($permissions);
+
         return [
-            ItemPermission::group(__('System'))
-                ->addPermission('platform.systems.roles', __('Roles'))
-                ->addPermission('platform.systems.users', __('Users')),
+            $permissions,
         ];
     }
 }
