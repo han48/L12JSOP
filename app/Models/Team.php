@@ -12,6 +12,8 @@ class Team extends JetstreamTeam
 {
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
+    use \Orchid\Screen\AsSource;
+    use \App\Traits\HasValidationData;
 
     /**
      * The attributes that are mass assignable.
