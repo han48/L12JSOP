@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Lang;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\Input;
 use Orchid\Support\Facades\Layout;
 
 class BaseEditScreen extends BaseScreen
@@ -57,17 +56,22 @@ class BaseEditScreen extends BaseScreen
     public function GetControls()
     {
         if ($this->controls === null) {
-            $columns = Schema::getColumnListing($this->getModelObject()->getTable());
+            $table = $this->getModelObject()->getTable();
+            $columns = Schema::getColumnListing($table);
             $controls = [];
             $base_name = $this->GetBaseName();
-            foreach ($columns as $value) {
-                if (!in_array($value, $this->ignores)) {
-                    if (Lang::has("$base_name.$value")) {
-                        $label = "$base_name.$value";
+            foreach ($columns as $column) {
+                if (!in_array($column, $this->ignores)) {
+                    if (Lang::has("$base_name.$column")) {
+                        $label = "$base_name.$column";
                     } else {
-                        $label = "$value";
+                        $label = $column;
                     }
-                    $controls[$value] = $label;
+                    $input_type = \App\Orchid\Helpers\Base::GetInputType($table, $column);
+                    $controls[$column] = [
+                        'label' => $label,
+                        'type' => $input_type,
+                    ];
                 }
             }
             return $controls;
@@ -134,7 +138,7 @@ class BaseEditScreen extends BaseScreen
         if (isset($id)) {
             $object = $class_name::find($id);
         } else {
-            $object = new $class_name();   
+            $object = new $class_name();
         }
         $this->object = $object;
         return [
@@ -153,8 +157,7 @@ class BaseEditScreen extends BaseScreen
         $controls = $this->GetControls();
         $inputs = [];
         foreach ($controls as $key => $value) {
-            $input = Input::make($base_name . '.' . $key)
-                ->title($value);
+            $input = \App\Orchid\Helpers\Base::GetInput($value, $base_name, $key);
             array_push($inputs, $input);
         }
         return [
