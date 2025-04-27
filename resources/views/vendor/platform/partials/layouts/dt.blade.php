@@ -1,5 +1,3 @@
-{{$title}}
+{{ $title }}
 
-<x-orchid-popover :content="$popover"/>
-
-
+<x-orchid-popover :content="$popover" />

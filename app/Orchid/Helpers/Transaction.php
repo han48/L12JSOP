@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Helpers;
 
-class Transaction extends Base 
+class Transaction extends Base
 {
     /**
      * Icon

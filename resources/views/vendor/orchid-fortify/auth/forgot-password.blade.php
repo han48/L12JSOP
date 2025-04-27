@@ -2,16 +2,11 @@
 @section('title', __('Forgot your password?'))
 
 @section('content')
-    <h1 class="h4 text-black mb-4">{{__('Forgot your password?')}}</h1>
+    <h1 class="h4 text-black mb-4">{{ __('Forgot your password?') }}</h1>
 
-    <form
-        role="form"
-        method="POST"
-        data-controller="form"
-        data-action="form#submit"
+    <form role="form" method="POST" data-controller="form" data-action="form#submit"
         data-turbo="{{ var_export(Str::startsWith(request()->path(), config('platform.prefix'))) }}"
-        data-form-button-animate="#button-login"
-        data-form-button-text="{{ __('Loading...') }}"
+        data-form-button-animate="#button-login" data-form-button-text="{{ __('Loading...') }}"
         action="{{ route('password.email') }}">
         @csrf
 
@@ -22,18 +17,11 @@
         @endif
 
         <p>
-        {{ __('No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
         </p>
 
         <div class="form-group">
-            {!!
-                \Orchid\Screen\Fields\Input::make('email')
-                ->type('email')
-                ->autofocus()
-                ->autocomplete('email')
-                ->placeholder('Enter your email')
-                ->title('E-Mail Address')
-            !!}
+            {!! \Orchid\Screen\Fields\Input::make('email')->type('email')->autofocus()->autocomplete('email')->placeholder('Enter your email')->title('E-Mail Address') !!}
         </div>
 
         <div class="row align-items-center">

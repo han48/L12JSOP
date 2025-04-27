@@ -5,38 +5,32 @@
 @endisset
 
 @if (!empty($name))
-<li class="nav-item {{ active($active) }}">
-    <a data-turbo="{{ var_export($turbo) }}"
-        {{ $attributes }}
-    >
-        @isset($icon)
-            <x-orchid-icon :path="$icon" width="1.125rem" height="1.125rem" class="overflow-visible"/>
-        @endisset
+    <li class="nav-item {{ active($active) }}">
+        <a data-turbo="{{ var_export($turbo) }}" {{ $attributes }}>
+            @isset($icon)
+                <x-orchid-icon :path="$icon" width="1.125rem" height="1.125rem" class="overflow-visible" />
+            @endisset
 
-        <span class="mx-2">{{ $name ?? '' }}</span>
+            <span class="mx-2">{{ $name ?? '' }}</span>
 
-        @isset($badge)
-            <b class="badge rounded-pill bg-{{$badge['class']}} col-auto ms-auto">{{$badge['data']()}}</b>
-        @endisset
-    </a>
-</li>
+            @isset($badge)
+                <b class="badge rounded-pill bg-{{ $badge['class'] }} col-auto ms-auto">{{ $badge['data']() }}</b>
+            @endisset
+        </a>
+    </li>
 @endif
 
-@if(!empty($list))
-    <div class="nav collapse sub-menu ps-3 {{active($active, 'show')}}"
-         id="menu-{{$slug}}"
-         @isset($parent)
-            data-bs-parent="#menu-{{$parent}}">
+@if (!empty($list))
+    <div class="nav collapse sub-menu ps-3 {{ active($active, 'show') }}" id="menu-{{ $slug }}"
+        @isset($parent)
+            data-bs-parent="#menu-{{ $parent }}">
          @else
             data-bs-parent="#headerMenuCollapse">
          @endisset
-        @foreach($list as $item)
-            {!!  $item->build($source) !!}
-        @endforeach
-    </div>
+        @foreach ($list as $item)
+            {!! $item->build($source) !!} @endforeach </div>
 @endif
 
-@if($divider)
+@if ($divider)
     <li class="divider my-2"></li>
 @endif
-

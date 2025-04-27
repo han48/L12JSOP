@@ -2,17 +2,11 @@
 @section('title', __('Sign in to your account'))
 
 @section('content')
-    <h1 class="h4 text-black mb-4">{{__('Sign in to your account')}}</h1>
+    <h1 class="h4 text-black mb-4">{{ __('Sign in to your account') }}</h1>
 
-    <form
-        role="form"
-        method="POST"
-        data-controller="form"
-        data-action="form#submit"
+    <form role="form" method="POST" data-controller="form" data-action="form#submit"
         data-turbo="{{ var_export(Str::startsWith(request()->path(), config('platform.prefix'))) }}"
-        data-form-button-animate="#button-login"
-        data-form-button-text="{{ __('Loading...') }}"
-        action="{{ route('login') }}">
+        data-form-button-animate="#button-login" data-form-button-text="{{ __('Loading...') }}" action="{{ route('login') }}">
         @csrf
 
         @include('platform::auth.signin')
@@ -29,7 +23,7 @@
                 @endif
 
                 @if (Route::has('password.request') && Route::has('register'))
-                        <span class="text-muted mx-2">/</span>
+                    <span class="text-muted mx-2">/</span>
                 @endif
 
                 @if (Route::has('password.request'))

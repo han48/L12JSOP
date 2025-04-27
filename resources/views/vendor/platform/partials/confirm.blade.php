@@ -1,8 +1,4 @@
-<div class="modal fade"
-     id="confirm-dialog"
-     data-controller="confirm"
-     tabindex="-1"
-     aria-hidden="true">
+<div class="modal fade" id="confirm-dialog" data-controller="confirm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,7 +15,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">
-                    {{__('Cancel')}}
+                    {{ __('Cancel') }}
                 </button>
 
                 <div data-confirm-target="button">
@@ -29,4 +25,3 @@
         </div>
     </div>
 </div>
-

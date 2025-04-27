@@ -33,7 +33,8 @@ const createTeam = () => {
                 <InputLabel value="Team Owner" />
 
                 <div class="flex items-center mt-2">
-                    <img class="object-cover size-12 rounded-full" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+                    <img class="object-cover size-12 rounded-full" :src="$page.props.auth.user.profile_photo_url"
+                        :alt="$page.props.auth.user.name">
 
                     <div class="ms-4 leading-tight">
                         <div class="text-gray-900">{{ $page.props.auth.user.name }}</div>
@@ -46,13 +47,7 @@ const createTeam = () => {
 
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="name" value="Team Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="block w-full mt-1"
-                    autofocus
-                />
+                <TextInput id="name" v-model="form.name" type="text" class="block w-full mt-1" autofocus />
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
         </template>

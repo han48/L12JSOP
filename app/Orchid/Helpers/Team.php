@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Helpers;
 
-class Team extends Base 
+class Team extends Base
 {
     /**
      * Icon
