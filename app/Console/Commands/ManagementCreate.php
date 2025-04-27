@@ -54,7 +54,7 @@ class ManagementCreate extends Command
             if (file_exists($model_stub_path)) {
                 $fileContents = file_get_contents($model_stub_path);
                 $modifiedContents = str_replace("{{ class }}", ucfirst($name), $fileContents);
-                $modifiedContents = str_replace("{{ table }}", ucfirst($table), $modifiedContents);
+                $modifiedContents = str_replace("{{ table }}", $table, $modifiedContents);
                 file_put_contents($model_path, $modifiedContents);
                 $this->info("=> Create model file: $model_path");
                 // Run the Artisan command to create a migration

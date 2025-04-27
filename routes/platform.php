@@ -107,4 +107,5 @@ Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.exam
 (new App\Orchid\Helpers\UserAdditionalInformation())->AddRoute();
 (new App\Orchid\Helpers\Transaction())->AddRoute();
 (new App\Orchid\Helpers\Product())->AddRoute();
+(new App\Orchid\Helpers\Post())->AddRoute();
 // (new App\Orchid\Helpers\{{ class }}())->AddRoute();

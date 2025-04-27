@@ -110,6 +110,7 @@ class PlatformProvider extends OrchidServiceProvider
         $menu = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddMenus($menu);
         $menu = (new \App\Orchid\Helpers\Product)->AddMenus($menu);
         $menu = (new \App\Orchid\Helpers\Transaction)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\Post)->AddMenus($menu);
         // $menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus($menu);
 
         $menu = array_merge($menu, $devMenu);
@@ -132,6 +133,7 @@ class PlatformProvider extends OrchidServiceProvider
         $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\Product)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\Transaction)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\Post)->AddPermissions($permissions);
         // $permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions($permissions);
 
         return [
