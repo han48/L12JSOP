@@ -31,7 +31,7 @@ const logout = () => {
 };
 
 const fetchNotifications = () => {
-    axios.get('/notifications/unread')
+    axios.get('/api/notifications/unread')
         .then(res => {
             hasNextNotifications.value = res.data.data.prev_page_url;
             newNotifications.value = res.data.data.data;
@@ -42,7 +42,7 @@ const fetchNotifications = () => {
 };
 
 const markNotification = (id) => {
-    axios.post('/notifications/maskNotification', {
+    axios.post('/api/notifications/maskNotification', {
         id: id,
     })
         .then(res => {
@@ -57,7 +57,7 @@ const markNotification = (id) => {
 }
 
 const markReadAll = () => {
-    axios.post('/notifications/markAllAsRead')
+    axios.post('/api/notifications/markAllAsRead')
         .then(res => {
             const message = res.data.message;
             toast.success(message, { autoClose: 1500 })
@@ -109,7 +109,7 @@ onMounted(() => {
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.current_team.name }}
+                                                {{ $page.props.auth.user.current_team?.name }}
 
                                                 <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
                                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5"

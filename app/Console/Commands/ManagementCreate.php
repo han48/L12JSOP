@@ -82,6 +82,42 @@ class ManagementCreate extends Command
             }
         }
 
+        $allow = filter_var($this->ask('Do you want to add API? (yes/no)', "yes"), FILTER_VALIDATE_BOOLEAN);
+        if ($allow) {
+            $this->info("Create client API controller...");
+            $client_api_path = "app/Http/Controllers/Api/" . $name . "Controller.php";
+            static::CreateDirectory($client_api_path);
+            if (file_exists($client_api_path)) {
+                $this->info("=> Client API is exist!");
+            } else {
+                $client_api_stub_path = "stubs/orchid/platform/api.stub";
+                if (file_exists($client_api_stub_path)) {
+                    $fileContents = file_get_contents($client_api_stub_path);
+                    $modifiedContents = str_replace("{{ class }}", ucfirst($name), $fileContents);
+                    file_put_contents($client_api_path, $modifiedContents);
+                    $this->info("=> Create helper file: $client_api_path");
+                }
+            }
+
+            $this->info("=> Insert router...");
+            $route_api_path = "routes/api.php";
+            if (!file_exists($route_api_path)) {
+                $this->info("=> routes/api is not exist!");
+            } else {
+                $keyword_route = "        // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,";
+                $route = $keyword_route;
+                $route = Str::replace("// ", "", $route);
+                $route = Str::replace("{{ class }}", ucfirst($name), $route);
+                $route = Str::replace("{{ table }}", $table, $route);
+
+                $fileContents = file_get_contents($route_api_path);
+                $modifiedContents = str_replace($keyword_route, $route . PHP_EOL . $keyword_route, $fileContents);
+                file_put_contents($route_api_path, $modifiedContents);
+
+                $this->info("=> $route");
+            }
+        }
+
         $this->info("Create list layout...");
         $list_layout_path = "app/Orchid/Layouts/$name/" . $name . "ListLayout.php";
         static::CreateDirectory($list_layout_path);
