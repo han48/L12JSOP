@@ -13,6 +13,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'web',
     'verified',
+    \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class
 ])->group(function ($route) {
     $route->prefix('notifications')
         ->name('notifications.')

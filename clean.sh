@@ -10,3 +10,4 @@ php artisan cache:clear
 php artisan migrate:fresh --seed
 php artisan storage:link
 php artisan orchid:admin
+php artisan test

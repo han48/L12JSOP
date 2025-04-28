@@ -23,6 +23,8 @@
     "dependencies": {
         "@heroicons/vue": "^2.2.0",
         "heroicons": "^2.2.0",
+        "laravel-precognition-vue": "^0.7.2",
+        "laravel-precognition-vue-inertia": "^0.7.2",
         "vue3-toastify": "^0.2.8"
     }
 }

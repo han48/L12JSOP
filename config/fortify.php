@@ -101,7 +101,10 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => [
+        'web',
+        \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
