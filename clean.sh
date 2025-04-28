@@ -11,3 +11,4 @@ php artisan migrate:fresh --seed
 php artisan storage:link
 php artisan orchid:admin
 php artisan test
+php artisan generate:erd erd.svg --format=svg

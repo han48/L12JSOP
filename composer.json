@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bensampo/laravel-enum": "^6.12",
+        "beyondcode/laravel-er-diagram-generator": "^4.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/dusk": "^8.3",
         "laravel/framework": "^12.0",
@@ -16,6 +17,7 @@
         "laravel/socialite": "^5.20",
         "laravel/telescope": "^5.7",
         "laravel/tinker": "^2.10.1",
+        "maatwebsite/excel": "^3.1",
         "orchid/crud": "^4.4",
         "orchid/fortify": "^0.0.12",
         "orchid/platform": "^14.50",
