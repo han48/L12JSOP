@@ -113,6 +113,17 @@ class PlatformProvider extends OrchidServiceProvider
         $menu = (new \App\Orchid\Helpers\Post)->AddMenus($menu);
         // $menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus($menu);
 
+        $debugMenu = [
+            Menu::make('')->title(__('DEBUG')),
+
+            Menu::make(__('Telescope'))
+                ->icon('bs.people')
+                ->route('telescope')
+                ->permission('platform.systems.telescope'),
+        ];
+
+        $menu = array_merge($menu, $debugMenu);
+
         $menu = array_merge($menu, $devMenu);
 
         return $menu;
@@ -128,6 +139,7 @@ class PlatformProvider extends OrchidServiceProvider
         $permissions = ItemPermission::group(__('System'));
         $permissions = $permissions->addPermission('platform.systems.roles', __('Roles'));
         $permissions = $permissions->addPermission('platform.systems.users', __('Users'));
+        $permissions = $permissions->addPermission('platform.systems.telescope', __('Telescope'));
 
         $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
