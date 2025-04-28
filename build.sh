@@ -10,4 +10,4 @@ php artisan cache:clear
 php artisan migrate
 php artisan storage:link
 php artisan test
-php artisan generate:erd erd.svg --format=svg
+php artisan generate:erd erd.jpeg --format=jpeg
