@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Orchid\Platform\Notifications\DashboardMessage;
 
-class UserNotificationController extends Controller
+class UserNotificationController extends BaseController
 {
     /**
      * @param mixed $user
@@ -18,9 +18,9 @@ class UserNotificationController extends Controller
         return $user->notifications()->where('type', DashboardMessage::class);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $notification = $this->prepareUserNotificationRelation($request->user());
+        $notification = $this->prepareUserNotificationRelation(request()->user());
 
         return response([
             'data' => $notification->paginate(),

@@ -2,17 +2,44 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use ReflectionClass;
 
-class BaseController extends Controller
+class BaseController
 {
+    /**
+     * Get base object name
+     */
+    public function GetBaseName()
+    {
+        $base_name = (new ReflectionClass($this))->getShortName();
+        $base_name = Str::replace("Controller", "", $base_name);
+        return $base_name;
+    }
+
+    /**
+     * Query data.
+     *
+     * @return array
+     */
+    public function model(): Builder
+    {
+        $base_name = $this->GetBaseName();
+        $class_name = "\App\Models\\" . $base_name;
+        $model = new $class_name();
+        $model = $model->where('status', 1);
+        return $model;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $model = $this->model();
+        return response()->json($model->paginate());
     }
 
     /**
@@ -20,7 +47,7 @@ class BaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -28,7 +55,8 @@ class BaseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $model = $this->model();
+        return response()->json($model->where('id', $id)->first());
     }
 
     /**
@@ -36,7 +64,7 @@ class BaseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -44,6 +72,6 @@ class BaseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort(403);
     }
 }
