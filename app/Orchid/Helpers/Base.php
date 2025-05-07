@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Helpers;
 
+use App\Models\User;
 use DateTimeZone;
 use ReflectionClass;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +119,11 @@ class Base
             case 'attachments':
                 $input_type = 'attachments';
                 break;
+            case 'author_id':
+            case 'user_id':
+            case 'admin_id':
+                $input_type = 'users';
+                break;
         }
         if (!isset($input_type)) {
             $type = Schema::getColumnType($table, $column);
@@ -183,6 +189,15 @@ class Base
                         1   => __('Publish'),
                         2   => __('Internal'),
                     ]);
+                break;
+            case 'users':
+                $options = [];
+                $users = User::all();
+                foreach ($users as $user) {
+                    $options[$user->id] = "$user->name ($user->email)";
+                }
+                $input = Select::make($name)
+                    ->options($options);
                 break;
             case 'number':
                 $input = Input::make($name)

@@ -96,4 +96,18 @@ class BaseListScreen extends BaseScreen
             'attribute' => __($base_name),
         ]));
     }
+
+    /**
+     * Clone item to database
+     */
+    public function clone(Request $request): void
+    {
+        $base_name = $this->GetBaseName();
+        $class_name = "\App\Models\\" . $base_name;
+        $item = $class_name::findOrFail($request->get('id'))->replicate();
+        $item->save();
+        Toast::info(__(':attribute was cloned.', [
+            'attribute' => __($base_name),
+        ]));
+    }
 }

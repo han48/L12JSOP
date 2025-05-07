@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('author_id');
+            $table->string('slug')->unique()->nullable();
             $table->string('title');
-            $table->string('image', 2048);
+            $table->string('image', 2048)->nullable();
             $table->text('html');
+            $table->text('summary');
             $table->string('categories')->nullable();
             $table->string('tags')->nullable();
             $table->tinyInteger('status')->default(0);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use ReflectionClass;
 
@@ -21,16 +22,74 @@ class BaseController
         return $base_name;
     }
 
-
-    public function index()
+    /**
+     * Query data.
+     *
+     * @return array
+     */
+    public function model(): Builder
     {
-        $base_name = Str::ucfirst(Str::plural($this->GetBaseName()));
-        return Inertia::render($base_name . '/List');
+        $base_name = $this->GetBaseName();
+        $class_name = "\App\Models\\" . $base_name;
+        $model = new $class_name();
+        $model = $model->where('status', 1);
+        return $model;
     }
 
-    public function show($new)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $base_name = Str::ucfirst(Str::plural($this->GetBaseName()));
-        return Inertia::render($base_name . '/Show');
+        if (request()->expectsJson()) {
+            $model = $this->model();
+            return response()->json($model->paginate());
+        } else {
+            $base_name = Str::ucfirst(Str::plural($this->GetBaseName()));
+            return Inertia::render($base_name . '/List');
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        if (request()->expectsJson()) {
+            $model = $this->model();
+            $item = $model->where('id', $id)->first();
+            if (isset($item)) {
+                return response()->json($item);
+            } else {
+                abort(404);
+            }
+        } else {
+            $base_name = Str::ucfirst(Str::plural($this->GetBaseName()));
+            return Inertia::render($base_name . '/Show');
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        abort(403);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        abort(403);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        abort(403);
     }
 }

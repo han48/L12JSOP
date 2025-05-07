@@ -28,6 +28,10 @@ class BaseListLayout extends Table
         'created_at',
         'updated_at',
         'deleted_at',
+        'html',
+        'content',
+        'summary',
+        'image',
     ];
 
     /**
@@ -143,6 +147,12 @@ class BaseListLayout extends Table
                         ->icon('bs.trash3')
                         ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                         ->method('remove', [
+                            'id' => $obj->id,
+                        ]),
+
+                    Button::make(__('Clone'))
+                        ->icon('bs.copy')
+                        ->method('clone', [
                             'id' => $obj->id,
                         ]),
                 ]));
