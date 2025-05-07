@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('payment_date');
             $table->decimal('amount', 20, 2)->default(0);
             $table->decimal('tax', 20, 2)->default(0);
+            $table->string('currency')->default('USD');
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable();
             $table->decimal('price', 20, 2)->default(0);
             $table->decimal('quantity', 20, 2)->default(0);
+            $table->string('currency')->default('USD');
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();

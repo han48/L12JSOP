@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('price', 20, 2)->default(0);
             $table->decimal('quantity', 20, 2)->default(-1);
             $table->string('categories', 1024)->nullable();
+            $table->string('currency')->default('USD');
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
