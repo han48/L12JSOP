@@ -7,7 +7,7 @@
         @isset($render)
             {!! $value !!}
         @else
-            {{ $value }}
+            {!! $value !!}
         @endisset
     </div>
 </td>

@@ -36,6 +36,29 @@ class Base
     }
 
     /**
+     * Get model class
+     *
+     * @return string
+     */
+    public function getModelClass()
+    {
+        return "App\Models\\" . Str::ucfirst($this->GetBaseName());
+    }
+
+    /**
+     * Get model object
+     *
+     * @return object
+     */
+    public function getModelObject()
+    {
+        $modal = $this->getModelClass();
+        if (class_exists($modal)) {
+            return new $modal();
+        }
+    }
+
+    /**
      * Add base route
      * LIST - CREATE - EDIT
      */
@@ -119,6 +142,10 @@ class Base
             case 'attachments':
                 $input_type = 'attachments';
                 break;
+            case 'tags':
+            case 'categories':
+                $input_type = 'tags';
+                break;
             case 'author_id':
             case 'user_id':
             case 'admin_id':
@@ -191,13 +218,26 @@ class Base
                     ]);
                 break;
             case 'users':
-                $options = [];
-                $users = User::all();
-                foreach ($users as $user) {
-                    $options[$user->id] = "$user->name ($user->email)";
-                }
                 $input = Select::make($name)
-                    ->options($options);
+                    ->fromQuery(User::where('status', '>=', 0), 'email')
+                    ->empty(__('No select'));
+                break;
+            case 'tags':
+                $model = "App\Models\\" . Str::ucfirst($base_name);
+                $model = new $model();
+                $items = $model->select($key)->distinct()->pluck($key);
+                $options = [];
+                foreach ($items as $data) {
+                    foreach ($data as $item) {
+                        array_push($options, $item);
+                    }
+                }
+                $options = array_unique($options);
+                $input = Select::make($name)
+                    ->allowAdd()
+                    ->multiple()
+                    ->options($options)
+                    ->empty(__('No select'));
                 break;
             case 'number':
                 $input = Input::make($name)

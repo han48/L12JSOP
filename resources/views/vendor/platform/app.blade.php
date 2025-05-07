@@ -21,6 +21,8 @@
             data-turbo-track="reload">
     @endif
 
+    @vite('resources/css/admin.css')
+
     @stack('head')
 
     <meta name="view-transition" content="same-origin">

@@ -125,7 +125,21 @@ class BaseListLayout extends Table
         $tds = [];
 
         foreach ($display as $key => $value) {
-            $td = TD::make($key, __($value))
+            $column = $key;
+            switch ($key) {
+                case 'image':
+                case 'status':
+                case 'categories':
+                case 'tags':
+                case 'user_id':
+                case 'author_id':
+                case 'admin_id':
+                    $column = 'display_' . $key;
+                    break;
+                default:
+                    break;
+            }
+            $td = TD::make($column, __($value))
                 ->sort()
                 ->filter(Input::make());
             array_push($tds, $td);
