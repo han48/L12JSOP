@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->string('transaction_code', 1024);
-            $table->text('transaction_data');
+            $table->string('code', 512)->unique();
+            $table->text('data');
             $table->string('image', 2048)->nullable();
             $table->timestamp('issue_date');
             $table->timestamp('payment_date');

@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Screens;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
@@ -10,6 +9,14 @@ use Orchid\Screen\Actions\Link;
 
 class BaseListScreen extends BaseScreen
 {
+    protected $cloneExcepts = [
+        'slug',
+        'status',
+        'user_name',
+        'username',
+        'code',
+    ];
+
     /**
      * Query data.
      *
@@ -104,7 +111,7 @@ class BaseListScreen extends BaseScreen
     {
         $base_name = $this->GetBaseName();
         $class_name = "\App\Models\\" . $base_name;
-        $item = $class_name::findOrFail($request->get('id'))->replicate();
+        $item = $class_name::findOrFail($request->get('id'))->replicate($this->cloneExcepts);
         $item->save();
         Toast::info(__(':attribute was cloned.', [
             'attribute' => __($base_name),
