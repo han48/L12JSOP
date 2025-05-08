@@ -39,17 +39,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <AppLayoutUnauth :title="`[${name.toUpperCase()}] ${loading ? 'Loading...' : ''}`">
+    <AppLayoutUnauth :title="`[${trans(name).toUpperCase()}] ${loading ? trans('loading') : ''}`">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <div v-if="loading">Loading...</div>
-                <div v-else-if="error_code" class="error">{{ error_code }}</div>
-                <div v-else>{{ name }}</div>
+                <div v-if="loading">{{ trans('loading') }}</div>
+                <div v-else-if="error_code" class="error">{{ trans(error_code) }}</div>
+                <div v-else>{{ trans(name) }}</div>
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <div v-if="loading"></div>
-            <div v-else-if="error" class="error">{{ error }}</div>
+            <div v-else-if="error" class="error">{{ trans(error) }}</div>
             <div v-else>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="item in items" :key="item.id" class="bg-white shadow-lg rounded-lg p-5">
@@ -60,12 +60,17 @@ onMounted(() => {
                             class="view-thumbnail">
                         </div>
                         <p class="text-gray-600 view-summary">{{ item.description }}</p>
-                        <a :href="`${pathname}/${item.id}`" class="text-blue-500 mt-3 inline-block">Read more →</a>
+                        <a :href="`${pathname}/${item.id}`" class="text-blue-500 mt-3 inline-block">{{
+                            trans('read_more') }}</a>
                     </div>
                 </div>
                 <div class="flex justify-between mt-5">
-                    <a v-if="urlPrevItems" :href="urlPrevItems" class="px-4 py-2 bg-gray-200 rounded">← Prev</a>
-                    <a v-if="urlNextItems" :href="urlNextItems" class="px-4 py-2 bg-gray-200 rounded">Next →</a>
+                    <a v-if="urlPrevItems" :href="urlPrevItems" class="px-4 py-2 bg-gray-200 rounded">{{
+                        trans('prev_page')
+                        }}</a>
+                    <a v-if="urlNextItems" :href="urlNextItems" class="px-4 py-2 bg-gray-200 rounded">{{
+                        trans('next_page')
+                        }}</a>
                 </div>
             </div>
         </div>
