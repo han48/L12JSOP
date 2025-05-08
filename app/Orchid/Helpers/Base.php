@@ -229,10 +229,9 @@ class Base
                 $options = [];
                 foreach ($items as $data) {
                     foreach ($data as $item) {
-                        array_push($options, $item);
+                        $options[$item] = $item;
                     }
                 }
-                $options = array_unique($options);
                 $input = Select::make($name)
                     ->allowAdd()
                     ->multiple()

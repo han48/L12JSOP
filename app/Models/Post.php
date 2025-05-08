@@ -5,6 +5,7 @@ namespace App\Models;
 class Post extends Base
 {
     Use \Illuminate\Database\Eloquent\SoftDeletes;
+    use \App\Traits\HasFullTextSearch;
 
     protected $table = 'posts';
 

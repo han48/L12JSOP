@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -18,13 +19,14 @@ return new class extends Migration
             $table->string('title');
             $table->string('image', 2048)->nullable();
             $table->text('html');
-            $table->text('summary');
-            $table->string('categories')->nullable();
-            $table->string('tags')->nullable();
+            $table->text('description')->nullable();
+            $table->string('categories', 1024)->nullable();
+            $table->string('tags', 1024)->nullable();
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE posts ADD FULLTEXT `search` (`description`, `categories`, `tags`)');
 
         Schema::create('comments', function (Blueprint $table) {
             $table->id();

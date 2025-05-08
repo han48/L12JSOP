@@ -16,7 +16,11 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0);
             // $table->softDeletes();
             $table->timestamps();
+            // $table->text('description')->nullable();
+            // $table->string('categories', 1024)->nullable();
+            // $table->string('tags', 1024)->nullable();
         });
+        // DB::statement('ALTER TABLE {{ table }} ADD FULLTEXT `search` (`description`, `categories`, `tags`)');
     }
 
     /**

@@ -31,6 +31,7 @@ class BaseListLayout extends Table
         'html',
         'content',
         'summary',
+        'description',
         'image',
     ];
 

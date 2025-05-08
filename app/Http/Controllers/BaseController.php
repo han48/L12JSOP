@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Base;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -23,16 +24,30 @@ class BaseController
     }
 
     /**
+     * Model data.
+     *
+     * @return array
+     */
+    public function model(): Base
+    {
+        $base_name = $this->GetBaseName();
+        $class_name = "\App\Models\\" . $base_name;
+        $model = new $class_name();
+        return $model;
+    }
+
+    /**
      * Query data.
      *
      * @return array
      */
-    public function model(): Builder
+    public function query(): Builder
     {
         $base_name = $this->GetBaseName();
         $class_name = "\App\Models\\" . $base_name;
         $model = new $class_name();
         $model = $model->where('status', 1);
+        $model = $model->orderBy('id', 'desc');
         return $model;
     }
 
@@ -42,7 +57,7 @@ class BaseController
     public function index()
     {
         if (request()->expectsJson()) {
-            $model = $this->model();
+            $model = $this->query();
             return response()->json($model->paginate());
         } else {
             $base_name = Str::ucfirst(Str::plural($this->GetBaseName()));
@@ -55,8 +70,11 @@ class BaseController
      */
     public function show($id)
     {
+        if (request()->has('recommendations')) {
+            return $this->recommendations($id);
+        }
         if (request()->expectsJson()) {
-            $model = $this->model();
+            $model = $this->query();
             $item = $model->where('id', $id)->first();
             if (isset($item)) {
                 return response()->json($item);
@@ -91,5 +109,36 @@ class BaseController
     public function destroy(string $id)
     {
         abort(403);
+    }
+
+    /**
+     * Recommendations
+     */
+    public function recommendations(string $id)
+    {
+        $model = $this->query();
+        $item = $model->where('id', $id)->first();
+        if (isset($item)) {
+            $model = $this->query();
+            $model = $model->where('id', '<>', $id);
+            $keys = array_unique(array_merge($item->categories, $item->tags));
+            $key = implode(" ", $keys);
+            if (in_array(\App\Traits\HasFullTextSearch::class, class_uses($this->model()))) {
+                $model = $model->search($key);
+            }
+            $recommendations = $model->take(3)->get();
+            $count = count($recommendations);
+            if ($count <= 3) {
+                $ids = collect($recommendations)->map(fn($recommendation) => $recommendation->id . '')->toArray();
+                array_push($ids, $id);
+                $model = $this->query();
+                $model = $model->whereNotIn('id', $ids);
+                $extents = $model->take(3 - $count)->get();
+                $recommendations = $recommendations->merge($extents);
+            }
+            return response()->json($recommendations);
+        } else {
+            abort(404);
+        }
     }
 }

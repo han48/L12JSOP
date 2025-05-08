@@ -22,3 +22,12 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+Route::middleware([
+    'web',
+])->group(function ($route) {
+    $route->resources([
+        'posts' => \App\Http\Controllers\Api\PostController::class,
+        // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
+    ]);
+});
