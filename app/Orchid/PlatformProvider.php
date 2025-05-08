@@ -120,6 +120,12 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bs.people')
                 ->route('telescope')
                 ->permission('platform.systems.telescope'),
+
+            
+            Menu::make(__('Horizon'))
+                ->icon('bs.journal')
+                ->route('horizon.index')
+                ->permission('platform.systems.horizon'),
         ];
 
         $menu = array_merge($menu, $debugMenu);
@@ -140,6 +146,7 @@ class PlatformProvider extends OrchidServiceProvider
         $permissions = $permissions->addPermission('platform.systems.roles', __('Roles'));
         $permissions = $permissions->addPermission('platform.systems.users', __('Users'));
         $permissions = $permissions->addPermission('platform.systems.telescope', __('Telescope'));
+        $permissions = $permissions->addPermission('platform.systems.horizon', __('Horizon'));
 
         $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
