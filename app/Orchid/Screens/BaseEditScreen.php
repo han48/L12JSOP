@@ -26,6 +26,7 @@ class BaseEditScreen extends BaseScreen
         'created_at',
         'updated_at',
         'deleted_at',
+        'read_at',
     ];
 
     /**

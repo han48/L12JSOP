@@ -75,7 +75,7 @@ class SendNotification extends Command
                         ->type($type)
                 );
             } catch (\Throwable $th) {
-                Log::error($th->getMessage(), $th);
+                Log::error($th->getMessage(), [$th]);
                 $result = false;
             }
         }

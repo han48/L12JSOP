@@ -22,6 +22,11 @@ class BaseListLayout extends Table
     protected $display = null;
 
     /**
+     * Disable action
+     */
+    protected $disableAction = false;
+
+    /**
      * Array of hidden column
      */
     protected $hidden = [
@@ -113,6 +118,32 @@ class BaseListLayout extends Table
     }
 
     /**
+     * Get actions
+     */
+    public function getActions($base_route, $obj)
+    {
+        return [
+
+            Link::make(__('Edit'))
+                ->route('platform.systems.' . $base_route . '.edit', $obj->id)
+                ->icon('bs.pencil'),
+
+            Button::make(__('Delete'))
+                ->icon('bs.trash3')
+                ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
+                ->method('remove', [
+                    'id' => $obj->id,
+                ]),
+
+            Button::make(__('Clone'))
+                ->icon('bs.copy')
+                ->method('clone', [
+                    'id' => $obj->id,
+                ]),
+        ];
+    }
+
+    /**
      * Get the table cells to be displayed.
      *
      * @return TD[]
@@ -146,31 +177,15 @@ class BaseListLayout extends Table
             array_push($tds, $td);
         }
 
-        $td = TD::make(__('Actions'))
-            ->align(TD::ALIGN_CENTER)
-            ->width('100px')
-            ->cantHide()
-            ->render(fn($obj) => DropDown::make()
-                ->icon('bs.three-dots-vertical')
-                ->list([
-
-                    Link::make(__('Edit'))
-                        ->route('platform.systems.' . $base_route . '.edit', $obj->id)
-                        ->icon('bs.pencil'),
-
-                    Button::make(__('Delete'))
-                        ->icon('bs.trash3')
-                        ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
-                        ->method('remove', [
-                            'id' => $obj->id,
-                        ]),
-
-                    Button::make(__('Clone'))
-                        ->icon('bs.copy')
-                        ->method('clone', [
-                            'id' => $obj->id,
-                        ]),
-                ]));
+        if (!$this->disableAction) {
+            $td = TD::make(__('Actions'))
+                ->align(TD::ALIGN_CENTER)
+                ->width('100px')
+                ->cantHide()
+                ->render(fn($obj) => DropDown::make()
+                    ->icon('bs.three-dots-vertical')
+                    ->list($this->getActions($base_route, $obj)));
+        }
 
         array_push($tds, $td);
 

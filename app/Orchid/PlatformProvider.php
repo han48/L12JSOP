@@ -106,6 +106,7 @@ class PlatformProvider extends OrchidServiceProvider
 
         $menu = array_merge($menu, $adminMenu);
 
+        $menu = (new \App\Orchid\Helpers\SendNotification)->AddMenus($menu);
         $menu = (new \App\Orchid\Helpers\Team)->AddMenus($menu);
         $menu = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddMenus($menu);
         $menu = (new \App\Orchid\Helpers\Product)->AddMenus($menu);
@@ -148,6 +149,7 @@ class PlatformProvider extends OrchidServiceProvider
         $permissions = $permissions->addPermission('platform.systems.telescope', __('Telescope'));
         $permissions = $permissions->addPermission('platform.systems.horizon', __('Horizon'));
 
+        $permissions = (new \App\Orchid\Helpers\SendNotification)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
         $permissions = (new \App\Orchid\Helpers\Product)->AddPermissions($permissions);

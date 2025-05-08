@@ -228,6 +228,12 @@ class Base
                     ->fromQuery(User::where('status', '>=', 0), 'email')
                     ->empty(__('No select'));
                 break;
+            case 'multiple_users':
+                $input = Select::make($name)
+                    ->fromQuery(User::where('status', '>=', 0), 'email')
+                    ->multiple()
+                    ->empty(__('No select'));
+                break;
             case 'tags':
                 $model = "App\Models\\" . Str::ucfirst($base_name);
                 $model = new $model();
@@ -281,6 +287,18 @@ class Base
                     ->sendTrueOrFalse();
             case 'checkbox':
                 $input = Attach::make($name);
+            case 'url':
+                $input = Input::make($name)->type('url');
+                break;
+            case 'notification_type':
+                $notificationTypes = array_column(\Orchid\Support\Color::cases(), 'name');
+                $options = [];
+                foreach ($notificationTypes as $notificationType) {
+                    $options[$notificationType] = $notificationType;
+                }
+                $input = Select::make($name)
+                    ->options($options);
+                break;
             default:
                 $input = Input::make($name);
                 break;
