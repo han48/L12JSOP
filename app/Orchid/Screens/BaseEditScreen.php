@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Lang;
@@ -67,11 +68,31 @@ class BaseEditScreen extends BaseScreen
                     } else {
                         $label = $column;
                     }
-                    $input_type = \App\Orchid\Helpers\Base::GetInputType($table, $column);
+                    $columnInfo = DB::select("SHOW COLUMNS FROM $table WHERE Field = '$column'")[0];
+                    $parts = preg_split('/[\s()]+/', $columnInfo->Type);
+                    $type = $parts[0];
+                    $input_type = \App\Orchid\Helpers\Base::GetInputType($table, $column, $type);
                     $controls[$column] = [
                         'label' => $label,
                         'type' => $input_type,
                     ];
+                    if (isset($columnInfo->Default)) {
+                        $controls[$column]['default'] = $columnInfo->Default;
+                    }
+                    if ($input_type === 'string' && count($parts) > 1) {
+                        $controls[$column]['maxlength'] = $parts[1];
+                    }
+                    if (isset($columnInfo->Null) && filter_var($columnInfo->Null, FILTER_VALIDATE_BOOLEAN)) {
+                        $controls[$column]['required'] = true;
+                    } else {
+                        switch ($columnInfo->Key) {
+                            case '':
+                            case 'UNI':
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
             return $controls;

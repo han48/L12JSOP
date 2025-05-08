@@ -123,7 +123,7 @@ class Base
     /**
      * Get input type
      */
-    public static function GetInputType($table, $column)
+    public static function GetInputType($table, $column, $type = null)
     {
         $input_type = null;
         switch ($column) {
@@ -153,7 +153,9 @@ class Base
                 break;
         }
         if (!isset($input_type)) {
-            $type = Schema::getColumnType($table, $column);
+            if (!isset($type)) {
+                $type = Schema::getColumnType($table, $column);
+            }
             switch ($type) {
                 case 'tinyint':
                 case 'smallint':
@@ -185,6 +187,10 @@ class Base
                 case 'blob':
                 case 'json':
                     $input_type = 'text';
+                    break;
+                case 'varchar':
+                case 'char':
+                    $input_type = 'string';
                     break;
                 default:
                     $input_type = 'string';
@@ -340,6 +346,9 @@ class Base
             if (array_key_exists('maxSize', $value)) {
                 $input = $input->maxSize($value['maxSize']);
             }
+            if (array_key_exists('maxlength', $value)) {
+                $input = $input->maxlength($value['maxlength']);
+            }
             if (array_key_exists('acceptedFiles', $value)) {
                 $input = $input->acceptedFiles($value['acceptedFiles']);
             }
@@ -390,6 +399,9 @@ class Base
             }
             if (array_key_exists('fromQuery', $value)) {
                 $input = $input->fromQuery($value['fromQuery']);
+            }
+            if (array_key_exists('default', $value)) {
+                $input = $input->value($value['default']);
             }
         }
         return $input;
