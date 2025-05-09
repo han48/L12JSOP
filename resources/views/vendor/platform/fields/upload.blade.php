@@ -46,7 +46,7 @@
                                 <small class="text-muted d-block">{{ __('Information to display') }}</small>
                             </h4>
 
-                            <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
+                            <button type="button" class="btn-close" title="{{ __('close') }}" data-bs-dismiss="modal"
                                 aria-label="Close">
                             </button>
                         </div>
@@ -110,7 +110,7 @@
                                     {{ __('Media Library') }}
                                     <small class="text-muted d-block">{{ __('Previously uploaded files') }}</small>
                                 </h4>
-                                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal"
+                                <button type="button" class="btn-close" title="{{ __('close') }}" data-bs-dismiss="modal"
                                     aria-label="Close">
                                 </button>
                             </div>

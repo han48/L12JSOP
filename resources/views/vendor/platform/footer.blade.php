@@ -2,7 +2,7 @@
     <div class="m-4 text-center text-muted">
         <p>Crafted with
 
-            <span title="Love from Lipetsk">
+            <span title="{{ __('Love from Lipetsk')}}">
                 <svg height="1.5em" width="1.5em" class="text-success" fill="currentColor" role="img"
                     viewBox="0 0 44.07 52.31" xmlns="http://www.w3.org/2000/svg">
                     <path

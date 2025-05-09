@@ -27,17 +27,17 @@ const updateTeamName = () => {
 <template>
     <FormSection @submitted="updateTeamName">
         <template #title>
-            Team Name
+            {{ trans('team_name') }}
         </template>
 
         <template #description>
-            The team's name and owner information.
+            {{ trans('the_team_s_name_and_owner_information') }}
         </template>
 
         <template #form>
             <!-- Team Owner Information -->
             <div class="col-span-6">
-                <InputLabel value="Team Owner" />
+                <InputLabel :value="trans('team_owner')" />
 
                 <div class="flex items-center mt-2">
                     <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url"
@@ -54,7 +54,7 @@ const updateTeamName = () => {
 
             <!-- Team Name -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Team Name" />
+                <InputLabel for="name" :value="trans('team_name')" />
 
                 <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full"
                     :disabled="!permissions.canUpdateTeam" />
@@ -65,11 +65,11 @@ const updateTeamName = () => {
 
         <template v-if="permissions.canUpdateTeam" #actions>
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+                {{ trans('saved') }}
             </ActionMessage>
 
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                {{ trans('save') }}
             </PrimaryButton>
         </template>
     </FormSection>

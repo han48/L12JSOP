@@ -96,7 +96,7 @@ onMounted(() => {
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    {{ ptrans('dashboard') }}
                                 </NavLink>
                             </div>
                         </div>
@@ -125,19 +125,19 @@ onMounted(() => {
                                         <div class="w-60">
                                             <!-- Team Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                                Manage Team
+                                                {{ trans('manage_team') }}
                                             </div>
 
                                             <!-- Team Settings -->
                                             <DropdownLink
                                                 v-if="$page.props.auth.user.current_team !== undefined && $page.props.auth.user.current_team !== null"
                                                 :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                Team Settings
+                                                {{ trans('team_settings') }}
                                             </DropdownLink>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
                                                 :href="route('teams.create')">
-                                                Create New Team
+                                                {{ trans('create_new_team') }}
                                             </DropdownLink>
 
                                             <!-- Team Switcher -->
@@ -145,7 +145,7 @@ onMounted(() => {
                                                 <div class="border-t border-gray-200" />
 
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                                    Switch Teams
+                                                    {{ trans('switch_teams') }}
                                                 </div>
 
                                                 <template v-for="team in $page.props.auth.user.all_teams"
@@ -186,7 +186,7 @@ onMounted(() => {
                                     <template #content>
                                         <!-- Account Management -->
                                         <div class="block px-4 py-2 text-xs text-gray-400 w-[350px]">
-                                            Notifications
+                                            {{ trans('notifications') }}
                                         </div>
 
                                         <div class="border-t border-gray-200" />
@@ -200,7 +200,7 @@ onMounted(() => {
                                             <div class="border-t border-gray-200" />
                                         </div>
                                         <DropdownLink @click="markReadAll()">
-                                            <div class="block text-center">Mark all as read.</div>
+                                            <div class="block text-center">{{ trans('mark_all_as_read') }}</div>
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -235,16 +235,16 @@ onMounted(() => {
                                     <template #content>
                                         <!-- Account Management -->
                                         <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
+                                            {{ trans('manage_account') }}
                                         </div>
 
                                         <DropdownLink :href="route('profile.show')">
-                                            Profile
+                                            {{ trans('profile') }}
                                         </DropdownLink>
 
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
                                             :href="route('api-tokens.index')">
-                                            API Tokens
+                                            {{ trans('api_tokens') }}
                                         </DropdownLink>
 
                                         <div class="border-t border-gray-200" />
@@ -252,7 +252,7 @@ onMounted(() => {
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
                                             <DropdownLink as="button">
-                                                Log Out
+                                                {{ trans('log_out') }}
                                             </DropdownLink>
                                         </form>
                                     </template>
@@ -285,7 +285,7 @@ onMounted(() => {
                     class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            {{ trans('dashboard') }}
                         </ResponsiveNavLink>
                     </div>
 
@@ -309,18 +309,18 @@ onMounted(() => {
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
-                                Profile
+                                {{ trans('profile') }}
                             </ResponsiveNavLink>
 
                             <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures"
                                 :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
-                                API Tokens
+                                {{ trans('api_tokens') }}
                             </ResponsiveNavLink>
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
                                 <ResponsiveNavLink as="button">
-                                    Log Out
+                                    {{ trans('log_out') }}
                                 </ResponsiveNavLink>
                             </form>
 
@@ -329,7 +329,7 @@ onMounted(() => {
                                 <div class="border-t border-gray-200" />
 
                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Manage Team
+                                    {{ trans('manage_team') }}
                                 </div>
 
                                 <!-- Team Settings -->
@@ -337,12 +337,12 @@ onMounted(() => {
                                     v-if="$page.props.auth.user.current_team !== undefined && $page.props.auth.user.current_team !== null"
                                     :href="route('teams.show', $page.props.auth.user.current_team)"
                                     :active="route().current('teams.show')">
-                                    Team Settings
+                                    {{ trans('team_settings') }}
                                 </ResponsiveNavLink>
 
                                 <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams"
                                     :href="route('teams.create')" :active="route().current('teams.create')">
-                                    Create New Team
+                                    {{ trans('create_new_team') }}
                                 </ResponsiveNavLink>
 
                                 <!-- Team Switcher -->
@@ -350,7 +350,7 @@ onMounted(() => {
                                     <div class="border-t border-gray-200" />
 
                                     <div class="block px-4 py-2 text-xs text-gray-400">
-                                        Switch Teams
+                                        {{ trans('switch_teams') }}
                                     </div>
 
                                     <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">

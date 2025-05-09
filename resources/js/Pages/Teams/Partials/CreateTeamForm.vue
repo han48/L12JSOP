@@ -21,16 +21,16 @@ const createTeam = () => {
 <template>
     <FormSection @submitted="createTeam">
         <template #title>
-            Team Details
+            {{ trans('team_details') }}
         </template>
 
         <template #description>
-            Create a new team to collaborate with others on projects.
+            {{ trans('create_a_new_team_to_collaborate_with_others_on_projects') }}
         </template>
 
         <template #form>
             <div class="col-span-6">
-                <InputLabel value="Team Owner" />
+                <InputLabel :value="trans('team_owner')" />
 
                 <div class="flex items-center mt-2">
                     <img class="object-cover size-12 rounded-full" :src="$page.props.auth.user.profile_photo_url"
@@ -46,7 +46,7 @@ const createTeam = () => {
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Team Name" />
+                <InputLabel for="name" :value="trans('team_name')" />
                 <TextInput id="name" v-model="form.name" type="text" class="block w-full mt-1" autofocus />
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
@@ -54,7 +54,7 @@ const createTeam = () => {
 
         <template #actions>
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Create
+                {{ trans('create') }}
             </PrimaryButton>
         </template>
     </FormSection>

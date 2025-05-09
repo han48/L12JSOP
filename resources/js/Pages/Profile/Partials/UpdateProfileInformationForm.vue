@@ -78,11 +78,11 @@ const clearPhotoFileInput = () => {
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title>
-            Profile Information
+            {{ trans('profile_information') }}
         </template>
 
         <template #description>
-            Update your account's profile information and email address.
+            {{ trans('update_your_account_s_profile_information_and_email_address') }}
         </template>
 
         <template #form>
@@ -91,7 +91,7 @@ const clearPhotoFileInput = () => {
                 <!-- Profile Photo File Input -->
                 <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview">
 
-                <InputLabel for="photo" value="Photo" />
+                <InputLabel for="photo" :value="trans('photo')" />
 
                 <!-- Current Profile Photo -->
                 <div v-show="!photoPreview" class="mt-2">
@@ -105,11 +105,11 @@ const clearPhotoFileInput = () => {
                 </div>
 
                 <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Select A New Photo
+                    {{ trans('select_new_photo') }}
                 </SecondaryButton>
 
                 <SecondaryButton v-if="user.profile_photo_path" type="button" class="mt-2" @click.prevent="deletePhoto">
-                    Remove Photo
+                    {{ trans('delete_photo') }}
                 </SecondaryButton>
 
                 <InputError :message="form.errors.photo" class="mt-2" />
@@ -117,7 +117,7 @@ const clearPhotoFileInput = () => {
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" :value="trans('name')" />
                 <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required
                     autocomplete="name" />
                 <InputError :message="form.errors.name" class="mt-2" />
@@ -125,24 +125,24 @@ const clearPhotoFileInput = () => {
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" :value="trans('email')" />
                 <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required
                     autocomplete="username" />
                 <InputError :message="form.errors.email" class="mt-2" />
 
                 <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
                     <p class="text-sm mt-2">
-                        Your email address is unverified.
+                        {{ trans('your_email_address_is_not_verified') }}
 
                         <Link :href="route('verification.send')" method="post" as="button"
                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             @click.prevent="sendEmailVerification">
-                        Click here to re-send the verification email.
+                        {{ trans('click_here_to_re_send_the_verification_email') }}
                         </Link>
                     </p>
 
                     <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600">
-                        A new verification link has been sent to your email address.
+                        {{ trans('a_new_verification_link_has_been_sent_to_your_email_address') }}
                     </div>
                 </div>
             </div>
@@ -150,11 +150,11 @@ const clearPhotoFileInput = () => {
 
         <template #actions>
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+                {{ trans('saved') }}
             </ActionMessage>
 
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                {{ trans('save') }}
             </PrimaryButton>
         </template>
     </FormSection>

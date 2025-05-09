@@ -40,30 +40,30 @@ const updatePassword = () => {
 <template>
     <FormSection @submitted="updatePassword">
         <template #title>
-            Update Password
+            {{ trans('update_password') }}
         </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            {{ trans('ensure_your_account_is_using_a_long_random_password_to_stay_secure') }}
         </template>
 
         <template #form>
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" :value="trans('current_password')" />
                 <TextInput id="current_password" ref="currentPasswordInput" v-model="form.current_password"
                     type="password" class="mt-1 block w-full" autocomplete="current-password" />
                 <InputError :message="form.errors.current_password" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" :value="trans('new_password')" />
                 <TextInput id="password" ref="passwordInput" v-model="form.password" type="password"
                     class="mt-1 block w-full" autocomplete="new-password" />
                 <InputError :message="form.errors.password" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" :value="trans('confirm_password')" />
                 <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password"
                     class="mt-1 block w-full" autocomplete="new-password" />
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
@@ -72,11 +72,11 @@ const updatePassword = () => {
 
         <template #actions>
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+                {{ trans('saved') }}
             </ActionMessage>
 
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+                {{ trans('save') }}
             </PrimaryButton>
         </template>
     </FormSection>

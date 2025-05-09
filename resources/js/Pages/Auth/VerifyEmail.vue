@@ -20,7 +20,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
 <template>
 
-    <Head title="Email Verification" />
+    <Head :title="ptrans('email_verification')" />
 
     <AuthenticationCard>
         <template #logo>
@@ -28,29 +28,28 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
         </template>
 
         <div class="mb-4 text-sm text-gray-600">
-            Before continuing, could you verify your email address by clicking on the link we just emailed to you? If
-            you didn't
-            receive the email, we will gladly send you another.
+            {{ trans('before_continuing_could_you_verify_your_email_address_by_clicking_on_the_link_we_just_emailed_to_you_if_you_didnt_receive_the_email_we_will_gladly_send_you_another') }}
         </div>
 
         <div v-if="verificationLinkSent" class="mb-4 font-medium text-sm text-green-600">
-            A new verification link has been sent to the email address you provided in your profile settings.
+            {{ trans('a_new_verification_link_has_been_sent_to_the_email_address_you_provided_in_your_profile_settings') }}
         </div>
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
+                    {{ trans('resend_verification_email') }}
                 </PrimaryButton>
 
                 <div>
                     <Link :href="route('profile.show')"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Edit Profile</Link>
+                        {{ trans('edit_profile') }}
+                    </Link>
 
                     <Link :href="route('logout')" method="post" as="button"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ms-2">
-                    Log Out
+                        {{ trans('log_out') }}
                     </Link>
                 </div>
             </div>

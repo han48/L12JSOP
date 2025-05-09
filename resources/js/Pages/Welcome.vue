@@ -28,7 +28,7 @@ function handleImageError() {
 
 <template>
 
-    <Head title="Welcome" />
+    <Head :title="ptrans('welcome')" />
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <img id="background" class="absolute -left-20 top-0 max-w-[877px]"
             src="https://laravel.com/assets/img/welcome/background.svg" />
@@ -47,23 +47,23 @@ function handleImageError() {
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link :href="route('posts.index')"
                             class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                        Posts
+                            {{ trans('posts') }}
                         </Link>
 
                         <Link v-if="$page.props.auth.user" :href="route('dashboard')"
                             class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                        Dashboard
+                            {{ trans('dashboard') }}
                         </Link>
 
                         <template v-else>
                             <Link :href="route('login')"
                                 class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Log in
+                                {{ trans('Log in') }}
                             </Link>
 
                             <Link v-if="canRegister" :href="route('register')"
                                 class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Register
+                                {{ trans('register') }}
                             </Link>
                         </template>
                     </nav>

@@ -100,23 +100,23 @@ const displayableRole = (role) => {
             <!-- Add Team Member -->
             <FormSection @submitted="addTeamMember">
                 <template #title>
-                    Add Team Member
+                    {{ trans('add_team_member') }}
                 </template>
 
                 <template #description>
-                    Add a new team member to your team, allowing them to collaborate with you.
+                    {{ trans('add_a_new_team_member_to_your_team_allowing_them_to_collaborate_with_you') }}
                 </template>
 
                 <template #form>
                     <div class="col-span-6">
                         <div class="max-w-xl text-sm text-gray-600">
-                            Please provide the email address of the person you would like to add to this team.
+                            {{ trans('please_provide_the_email_address_of_the_person_you_would_like_to_add_to_this_team') }}
                         </div>
                     </div>
 
                     <!-- Member Email -->
                     <div class="col-span-6 sm:col-span-4">
-                        <InputLabel for="email" value="Email" />
+                        <InputLabel for="email" :value="trans('email')" />
                         <TextInput id="email" v-model="addTeamMemberForm.email" type="email"
                             class="mt-1 block w-full" />
                         <InputError :message="addTeamMemberForm.errors.email" class="mt-2" />
@@ -124,7 +124,7 @@ const displayableRole = (role) => {
 
                     <!-- Role -->
                     <div v-if="availableRoles.length > 0" class="col-span-6 lg:col-span-4">
-                        <InputLabel for="roles" value="Role" />
+                        <InputLabel for="roles" :value="trans('role')" />
                         <InputError :message="addTeamMemberForm.errors.role" class="mt-2" />
 
                         <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
@@ -161,12 +161,12 @@ const displayableRole = (role) => {
 
                 <template #actions>
                     <ActionMessage :on="addTeamMemberForm.recentlySuccessful" class="me-3">
-                        Added.
+                        {{ trans('added') }}
                     </ActionMessage>
 
                     <PrimaryButton :class="{ 'opacity-25': addTeamMemberForm.processing }"
                         :disabled="addTeamMemberForm.processing">
-                        Add
+                        {{ trans('add') }}
                     </PrimaryButton>
                 </template>
             </FormSection>
@@ -178,12 +178,11 @@ const displayableRole = (role) => {
             <!-- Team Member Invitations -->
             <ActionSection class="mt-10 sm:mt-0">
                 <template #title>
-                    Pending Team Invitations
+                    {{ trans('pending_team_invitations') }}
                 </template>
 
                 <template #description>
-                    These people have been invited to your team and have been sent an invitation email. They may join
-                    the team by accepting the email invitation.
+                    {{ trans('these_people_have_been_invited_to_your_team_and_have_been_sent_an_invitation_email_they_may_join_the_team_by_accepting_the_email_invitation') }}
                 </template>
 
                 <!-- Pending Team Member Invitation List -->
@@ -200,7 +199,7 @@ const displayableRole = (role) => {
                                 <button v-if="userPermissions.canRemoveTeamMembers"
                                     class="cursor-pointer ms-6 text-sm text-red-500 focus:outline-none"
                                     @click="cancelTeamInvitation(invitation)">
-                                    Cancel
+                                    {{ trans('cancel') }}
                                 </button>
                             </div>
                         </div>
@@ -215,11 +214,11 @@ const displayableRole = (role) => {
             <!-- Manage Team Members -->
             <ActionSection class="mt-10 sm:mt-0">
                 <template #title>
-                    Team Members
+                    {{ trans('team_members') }}
                 </template>
 
                 <template #description>
-                    All of the people that are part of this team.
+                    {{ trans('all_of_the_people_that_are_part_of_this_team') }}
                 </template>
 
                 <!-- Team Member List -->
@@ -248,14 +247,14 @@ const displayableRole = (role) => {
                                 <!-- Leave Team -->
                                 <button v-if="$page.props.auth.user.id === user.id"
                                     class="cursor-pointer ms-6 text-sm text-red-500" @click="confirmLeavingTeam">
-                                    Leave
+                                    {{ trans('leave') }}
                                 </button>
 
                                 <!-- Remove Team Member -->
                                 <button v-else-if="userPermissions.canRemoveTeamMembers"
                                     class="cursor-pointer ms-6 text-sm text-red-500"
                                     @click="confirmTeamMemberRemoval(user)">
-                                    Remove
+                                    {{ trans('remove') }}
                                 </button>
                             </div>
                         </div>
@@ -267,7 +266,7 @@ const displayableRole = (role) => {
         <!-- Role Management Modal -->
         <DialogModal :show="currentlyManagingRole" @close="currentlyManagingRole = false">
             <template #title>
-                Manage Role
+                {{ trans('manage_role') }}
             </template>
 
             <template #content>
@@ -305,12 +304,12 @@ const displayableRole = (role) => {
 
             <template #footer>
                 <SecondaryButton @click="currentlyManagingRole = false">
-                    Cancel
+                    {{ trans('cancel') }}
                 </SecondaryButton>
 
                 <PrimaryButton class="ms-3" :class="{ 'opacity-25': updateRoleForm.processing }"
                     :disabled="updateRoleForm.processing" @click="updateRole">
-                    Save
+                    {{ trans('save') }}
                 </PrimaryButton>
             </template>
         </DialogModal>
@@ -318,21 +317,21 @@ const displayableRole = (role) => {
         <!-- Leave Team Confirmation Modal -->
         <ConfirmationModal :show="confirmingLeavingTeam" @close="confirmingLeavingTeam = false">
             <template #title>
-                Leave Team
+                {{ trans('leave_team') }}
             </template>
 
             <template #content>
-                Are you sure you would like to leave this team?
+                {{ trans('are_you_sure_you_would_like_to_leave_this_team') }}
             </template>
 
             <template #footer>
                 <SecondaryButton @click="confirmingLeavingTeam = false">
-                    Cancel
+                    {{ trans('cancel') }}
                 </SecondaryButton>
 
                 <DangerButton class="ms-3" :class="{ 'opacity-25': leaveTeamForm.processing }"
                     :disabled="leaveTeamForm.processing" @click="leaveTeam">
-                    Leave
+                    {{ trans('leave') }}
                 </DangerButton>
             </template>
         </ConfirmationModal>
@@ -340,21 +339,21 @@ const displayableRole = (role) => {
         <!-- Remove Team Member Confirmation Modal -->
         <ConfirmationModal :show="teamMemberBeingRemoved" @close="teamMemberBeingRemoved = null">
             <template #title>
-                Remove Team Member
+                {{ trans('remove_team_member') }}
             </template>
 
             <template #content>
-                Are you sure you would like to remove this person from the team?
+                {{ trams('are_you_sure_you_would_like_to_remove_this_person_from_the_team') }}
             </template>
 
             <template #footer>
                 <SecondaryButton @click="teamMemberBeingRemoved = null">
-                    Cancel
+                    {{ trans('cancel') }}
                 </SecondaryButton>
 
                 <DangerButton class="ms-3" :class="{ 'opacity-25': removeTeamMemberForm.processing }"
                     :disabled="removeTeamMemberForm.processing" @click="removeTeamMember">
-                    Remove
+                    {{ trans('remove') }}
                 </DangerButton>
             </template>
         </ConfirmationModal>

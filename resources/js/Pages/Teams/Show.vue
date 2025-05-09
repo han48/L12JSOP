@@ -13,10 +13,10 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Team Settings">
+    <AppLayout :title="ptrans('team_settings')">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Team Settings
+                {{ ptrans('team_settings') }}
             </h2>
         </template>
 

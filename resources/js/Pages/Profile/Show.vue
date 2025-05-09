@@ -14,10 +14,10 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayout :title="ptrans('profile')">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Profile
+                {{ ptrans('profile') }}
             </h2>
         </template>
 

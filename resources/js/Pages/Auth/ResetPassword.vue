@@ -28,7 +28,7 @@ const submit = () => {
 
 <template>
 
-    <Head title="Reset Password" />
+    <Head :title="ptrans('reset_password')" />
 
     <AuthenticationCard>
         <template #logo>
@@ -37,21 +37,21 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" :value="trans('email')" />
                 <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus
                     autocomplete="username" />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" :value="trans('password')" />
                 <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required
                     autocomplete="new-password" />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" :value="trans('confirm_password')" />
                 <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password"
                     class="mt-1 block w-full" required autocomplete="new-password" />
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
@@ -59,7 +59,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
+                    {{ trans('reset_password') }}
                 </PrimaryButton>
             </div>
         </form>

@@ -6,7 +6,7 @@
                 <h4 class="modal-title text-body-emphasis fw-light text-balance text-break" data-modal-target="title">
                     {{ __('Search') }}
                 </h4>
-                <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" title="{{ __('close') }}" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
 

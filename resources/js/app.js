@@ -11,13 +11,19 @@ import { i18nVue } from "laravel-vue-i18n";
 import { trans as t } from "laravel-vue-i18n";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const trans = (key, replacements = null, prefix = "user.") => {
+    key = (key + "").toLowerCase();
+    key = prefix + key.replace(/ /g, "_");
+    const result = t(key, replacements);
+    return result;
+}
 const TranslatePlugin = {
     install(app) {
-        app.config.globalProperties.trans = (key, replacements = null, prefix = "user.") => {
-            key = (key + "").toLowerCase();
-            key = prefix + key.replace(/ /g, "_");
-            const result = t(key, replacements);
-            return result === key ? '...' : result;
+        app.config.globalProperties.trans = trans;
+        app.config.globalProperties.otrans = t;
+        app.config.globalProperties.ptrans = (key, replacements = null, prefix = "user.") => {
+            const result = trans(key, replacements, prefix);
+            return result === prefix + key ? '...' : result;
         };
     }
 };
@@ -36,6 +42,7 @@ createInertiaApp({
                     const langs = import.meta.glob("../../lang/*.json");
                     return await langs[`../../lang/${lang}.json`]();
                 },
+                postTranslation: (str) => str.replace(/:(\w+)/g, '{$1}')
             })
             .use(TranslatePlugin)
             .mount(el);

@@ -22,7 +22,7 @@ const submit = () => {
 
 <template>
 
-    <Head title="Forgot Password" />
+    <Head :title="ptrans('forgot_password')" />
 
     <AuthenticationCard>
         <template #logo>
@@ -30,18 +30,16 @@ const submit = () => {
         </template>
 
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link
-            that will allow you to choose a new one.
+            {{ trans('forgot_your_password_no_problem_just_let_us_know_your_email_address_and_we_will_email_you_a_password_reset_link_that_will_allow_you_to_choose_a_new_one') }}
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+            {{ trans(status) }}
         </div>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" :value="trans('email')" />
                 <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus
                     autocomplete="username" />
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -49,7 +47,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    {{ trans('email_password_reset_link') }}
                 </PrimaryButton>
             </div>
         </form>

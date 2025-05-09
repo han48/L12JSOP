@@ -27,44 +27,43 @@ const deleteTeam = () => {
 <template>
     <ActionSection>
         <template #title>
-            Delete Team
+            {{ trans('delete_team') }}
         </template>
 
         <template #description>
-            Permanently delete this team.
+            {{ trans('permanently_delete_this_team') }}
         </template>
 
         <template #content>
             <div class="max-w-xl text-sm text-gray-600">
-                Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this
-                team, please download any data or information regarding this team that you wish to retain.
+                {{ trans('once_a_team_is_deleted_all_of_its_resources_and_data_will_be_permanently_deleted_before_deleting_this_team_please_download_any_data_or_information_regarding_this_team_that_you_wish_to_retain') }}
             </div>
 
             <div class="mt-5">
                 <DangerButton @click="confirmTeamDeletion">
-                    Delete Team
+                    {{ trans('delete_team') }}
                 </DangerButton>
             </div>
 
             <!-- Delete Team Confirmation Modal -->
             <ConfirmationModal :show="confirmingTeamDeletion" @close="confirmingTeamDeletion = false">
                 <template #title>
-                    Delete Team
+                    {{ trans('delete_team') }}
                 </template>
 
                 <template #content>
-                    Are you sure you want to delete this team? Once a team is deleted, all of its resources and data
-                    will be permanently deleted.
+                    {{ trans('are_you_sure_you_want_to_delete_this_team_once_a_team_is_deleted_all_of_its_resources_and_data_will_be_permanently_deleted') }}
+
                 </template>
 
                 <template #footer>
                     <SecondaryButton @click="confirmingTeamDeletion = false">
-                        Cancel
+                        {{ trans('cancel') }}
                     </SecondaryButton>
 
                     <DangerButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                         @click="deleteTeam">
-                        Delete Team
+                        {{ trans('delete_team') }}
                     </DangerButton>
                 </template>
             </ConfirmationModal>

@@ -39,12 +39,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <AppLayoutUnauth :title="`[${trans(name).toUpperCase()}] ${loading ? trans('loading') : ''}`">
+    <AppLayoutUnauth :title="`[${ptrans(name).toUpperCase()}] ${loading ? ptrans('loading') : ''}`">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <div v-if="loading">{{ trans('loading') }}</div>
+                <div v-if="loading">{{ ptrans('loading') }}</div>
                 <div v-else-if="error_code" class="error">{{ trans(error_code) }}</div>
-                <div v-else>{{ trans(name) }}</div>
+                <div v-else>{{ ptrans(name) }}</div>
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">

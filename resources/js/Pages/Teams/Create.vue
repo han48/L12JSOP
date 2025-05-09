@@ -4,10 +4,10 @@ import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue';
 </script>
 
 <template>
-    <AppLayout title="Create Team">
+    <AppLayout :title="ptrans('create_team')">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Create Team
+                {{ ptrans('create_team') }}
             </h2>
         </template>
 

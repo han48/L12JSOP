@@ -9,7 +9,7 @@ defineProps({
 
 <template>
 
-    <Head title="Privacy Policy" />
+    <Head :title="ptrans('privacy_policy')" />
 
     <div class="font-sans text-gray-900 antialiased">
         <div class="pt-4 bg-gray-100">
