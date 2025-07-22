@@ -22,3 +22,5 @@ yarn-error.log
 /.vscode
 /.zed
 lang/php_*.json
+*.sqlite
+*.sqlite3

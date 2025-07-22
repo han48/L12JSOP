@@ -27,7 +27,11 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-        DB::statement('ALTER TABLE products ADD FULLTEXT `search` (`description`, `categories`, `tags`)');
+        try {
+            DB::statement('ALTER TABLE products ADD FULLTEXT `search` (`description`, `categories`, `tags`)');
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
