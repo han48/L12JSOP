@@ -17,6 +17,7 @@ return [
     'recommendations' => 'Recommendations',
     'not_found' => 'NOT FOUND',
     '404' => '404',
+    '500' => '500',
     'log_in' => 'Log in',
     'log_out' => 'Log out',
     'register' => 'Register',
@@ -30,6 +31,7 @@ return [
     'delete' => 'Delete',
     'confirm' => 'Confirm',
     'dashboard' => 'Dashboard',
+    'videos' => 'Videos',
     'team_settings' => 'Team Settings',
     'team' => 'Team',
     'email' => 'Email',
@@ -50,6 +52,12 @@ return [
     'done' => 'Done.',
     'saved' => 'Saved.',
     'added' => 'Added.',
+    'status_list' => [
+        'pending' => 'Pending',
+        'in_progress' => 'In-Progress',
+        'done' => 'Done',
+        'fail' => 'Failed',
+    ],
     'api_tokens' => 'API Tokens',
     'api_token' => 'API Token',
     'profile' => 'Profile',
@@ -160,6 +168,7 @@ return [
     'are_you_sure_you_want_to_delete_this_team_once_a_team_is_deleted_all_of_its_resources_and_data_will_be_permanently_deleted' => 'Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be permanently deleted.',
     'permanently_delete_this_team' => 'Permanently delete this team.',
     'once_a_team_is_deleted_all_of_its_resources_and_data_will_be_permanently_deleted_before_deleting_this_team_please_download_any_data_or_information_regarding_this_team_that_you_wish_to_retain' => 'Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team, please download any data or information regarding this team that you wish to retain.',
+    'internal_server_error' => 'Internal server error. Please contact with admin.',
 
     'posts' => 'Posts',
 ];
