@@ -300,6 +300,10 @@ class Base
                     ->options($options);
                 break;
             default:
+                if ($key == "video_url") {
+                    $input = \App\Orchid\Fields\VideoPlayer::make($name);
+                    break;
+                }
                 $input = Input::make($name);
                 break;
         }

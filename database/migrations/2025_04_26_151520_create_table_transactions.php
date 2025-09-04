@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('code', 512)->unique();
             $table->text('data');
             $table->string('image', 2048)->nullable();
-            $table->timestamp('issue_date');
-            $table->timestamp('payment_date');
+            $table->timestamp('issue_date')->nullable();
+            $table->timestamp('payment_date')->nullable();
             $table->decimal('amount', 20, 2)->default(0);
             $table->decimal('tax', 20, 2)->default(0);
             $table->string('currency')->default('USD');

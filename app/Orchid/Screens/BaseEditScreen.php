@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Lang;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
+use stdClass;
 
 class BaseEditScreen extends BaseScreen
 {
@@ -53,13 +54,22 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
+     * Get column from table
+     */
+    public function GetColumns($table)
+    {
+        $columns = Schema::getColumnListing($table);
+        return $columns;
+    }
+
+    /**
      * Get array of editable column
      */
     public function GetControls()
     {
         if ($this->controls === null) {
             $table = $this->getModelObject()->getTable();
-            $columns = Schema::getColumnListing($table);
+            $columns = $this->GetColumns($table);
             $controls = [];
             $base_name = $this->GetBaseName();
             foreach ($columns as $column) {
@@ -69,7 +79,17 @@ class BaseEditScreen extends BaseScreen
                     } else {
                         $label = $column;
                     }
-                    $columnInfo = DB::select("SHOW COLUMNS FROM $table WHERE Field = '$column'")[0];
+                    try {
+                        $columnInfo = DB::select("SHOW COLUMNS FROM $table WHERE Field = '$column'")[0];
+                    } catch (\Exception $ex) {
+                        $columnInfo = new stdClass();
+                        $columnInfo->Field = $column;
+                        $columnInfo->Type = "varchar";
+                        $columnInfo->Null = null;
+                        $columnInfo->Key = null;
+                        $columnInfo->Default = null;
+                        $columnInfo->Extra = null;
+                    }
                     $parts = preg_split('/[\s()]+/', $columnInfo->Type);
                     $type = $parts[0];
                     $input_type = \App\Orchid\Helpers\Base::GetInputType($table, $column, $type);
