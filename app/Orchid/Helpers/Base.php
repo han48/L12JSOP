@@ -76,7 +76,7 @@ class Base
                 ->push($obj, route('platform.systems.' . Str::plural($router_name) . '.edit', $obj)));
 
         // Platform > System > router_name > Create
-        Route::screen($router_name . 's/create', 'App\Orchid\Screens\\' . $base_name . '\\' . $base_name . 'EditScreen')
+        Route::screen($router_name . '/create', 'App\Orchid\Screens\\' . $base_name . '\\' . $base_name . 'EditScreen')
             ->name('platform.systems.' . Str::plural($router_name) . '.create')
             ->breadcrumbs(fn(Trail $trail) => $trail
                 ->parent('platform.systems.' . Str::plural($router_name))
