@@ -1,12 +1,22 @@
 <?php
 
 use App\Http\Controllers\UserNotificationController;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+ROute::middleware([
+    'auth:sanctum',
+
+])->group(function ($route) {
+    $route->post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    $route->get('/user', function (Request $request) {
+        return $request->user();
+    });
+});
 
 Route::middleware([
     'auth:sanctum',

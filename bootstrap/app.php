@@ -13,8 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            \App\Http\Middleware\NormalizeLocale::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\LocalizationMiddleware::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+        ]);
+        $middleware->api(append: [
+            \App\Http\Middleware\NormalizeLocale::class,
+            \App\Http\Middleware\LocalizationMiddleware::class,
         ]);
         $middleware->alias([
             'access' => \Orchid\Platform\Http\Middleware\Access::class,
