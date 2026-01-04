@@ -1,3 +1,37 @@
+## About back-end helper
+
+# Create admin hepler
+
+Tự động tạo các model, migration, screen, table, menu, permission.
+
+```shell
+php artisan management:create {name}
+```
+
+Ví dụ:
+```
+php artisan management:create SignLanguageLearn
+```
+
+# Create user helper
+
+Tự động tạo màn hình list, view
+
+```shell
+php artisan user:view {name}
+```
+
+Ví dụ:
+```
+php artisan user:view SignLanguageLearn
+```
+
+# Tạo mô hình quan hệ thực thể của database ERD
+
+```
+php artisan generate:erd
+```
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
