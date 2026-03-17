@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-if (config('fortify.home.enable', false)) {
+if (config('fortify.home_page.enable', false)) {
     Route::get('/', function () {
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),

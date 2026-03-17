@@ -49,10 +49,6 @@ return [
         'enable' => false,
     ],
 
-    'home' => [
-        'enable' => false,
-    ],
-
     'username' => 'email',
 
     'email' => 'email',
@@ -82,6 +78,9 @@ return [
     */
 
     'home' => '/dashboard',
+    'home_page' => [
+        'enable' => false,
+    ],
 
     /*
     |--------------------------------------------------------------------------
