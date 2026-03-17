@@ -4,26 +4,30 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'hasPostIndex' => Route::has('posts.index'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'appVersion' => \App\Application::version(),
-        'appName' => \App\Application::name(),
-    ]);
-})->name('welcome');
+if (config('fortify.home.enable', false)) {
+    Route::get('/', function () {
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'hasPostIndex' => Route::has('posts.index'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+            'appVersion' => \App\Application::version(),
+            'appName' => \App\Application::name(),
+        ]);
+    })->name('welcome');
+}
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    if (config('fortify.user.enable', false)) {
+        Route::get('/dashboard', function () {
+            return Inertia::render('Dashboard');
+        })->name('dashboard');
+    }
 });
 
 Route::middleware([

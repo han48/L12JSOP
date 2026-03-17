@@ -49,6 +49,10 @@ return [
         'enable' => false,
     ],
 
+    'home' => [
+        'enable' => false,
+    ],
+
     'username' => 'email',
 
     'email' => 'email',
