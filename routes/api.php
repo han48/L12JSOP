@@ -36,9 +36,10 @@ Route::middleware([
         });
 
     $route->resources([
-        'posts' => \App\Http\Controllers\Api\PostController::class,
-        'products' => \App\Http\Controllers\Api\ProductController::class,
-        'transactions' => \App\Http\Controllers\Api\TransactionController::class,
+        // TODO for DEV: enable api route
+        // 'posts' => \App\Http\Controllers\Api\PostController::class,
+        // 'products' => \App\Http\Controllers\Api\ProductController::class,
+        // 'transactions' => \App\Http\Controllers\Api\TransactionController::class,
         // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
     ]);
 });

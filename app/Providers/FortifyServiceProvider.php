@@ -9,11 +9,12 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\FortifyServiceProvider as OriginalFortifyServiceProvider;
 
-class FortifyServiceProvider extends ServiceProvider
+class FortifyServiceProvider extends OriginalFortifyServiceProvider
 {
     /**
      * Register any application services.
@@ -21,6 +22,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        Fortify::ignoreRoutes();
     }
 
     /**
@@ -32,6 +34,15 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        Route::group([
+            'namespace' => 'Laravel\Fortify\Http\Controllers',
+            'domain' => config('fortify.domain', null),
+            'prefix' => config('fortify.prefix'),
+        ], function () {
+            // TODO for DEV: Enable fortify router
+            $this->loadRoutesFrom(__DIR__ . '/../../routes/fortify.php');
+        });
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());

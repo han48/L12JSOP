@@ -8,6 +8,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
+        'hasPostIndex' => Route::has('posts.index'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'appVersion' => \App\Application::version(),
@@ -29,7 +30,8 @@ Route::middleware([
     'web',
 ])->group(function ($route) {
     $route->resources([
-        'posts' => \App\Http\Controllers\Api\PostController::class,
+        // TODO for DEV: enable web route
+        // 'posts' => \App\Http\Controllers\Api\PostController::class,
         // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
     ]);
 });
