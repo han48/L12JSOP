@@ -10,6 +10,15 @@ class RemoveTeamMemberTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! \Laravel\Jetstream\Features::hasTeamFeatures()) {
+            $this->markTestSkipped('Jetstream team features are not enabled');
+        }
+    }
+
     public function test_team_members_can_be_removed_from_teams(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());

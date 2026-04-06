@@ -1,95 +1,242 @@
-## About back-end helper
+# Laravel Admin
 
-# Create admin hepler
+This is the admin project for the Laravel application, built with the Laravel framework and Orchid admin panel. The project uses Vue.js for the user interface via Inertia.js, and Tailwind CSS for styling.
 
-Tự động tạo các model, migration, screen, table, menu, permission.
+## System Requirements
 
-```shell
+- PHP ^8.2
+- Composer
+- Node.js and npm
+- Docker (optional, using Laravel Sail)
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd Laravel-admin
+```
+
+### 2. Install dependencies
+
+```bash
+composer install
+npm install
+```
+
+### 3. Environment configuration
+
+Copy the `.env.example` file to `.env` and configure the necessary environment variables:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 4. Run migrations and seed the database
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+### 5. Create symbolic link for storage
+
+```bash
+php artisan storage:link
+```
+
+### 6. Create Orchid admin account
+
+```bash
+php artisan orchid:admin
+```
+
+## Running the Project
+
+### Running in development environment
+
+Use the `dev` script in composer to run the server, queue, logs, and Vite simultaneously:
+
+```bash
+composer run dev
+```
+
+Or run individually:
+
+```bash
+# Run Laravel server
+php artisan serve
+
+# Run queue worker
+php artisan queue:listen --tries=1
+
+# Run logs
+php artisan pail --timeout=0
+
+# Run Vite (frontend)
+npm run dev
+```
+
+### Using Laravel Sail (Docker)
+
+If you are using Docker:
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail npm run dev
+```
+
+## Build for Production
+
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## Useful Scripts
+
+### Clean script (clean.sh)
+
+This script will reinstall all dependencies, clear caches, perform a fresh migration with seed, and run tests:
+
+```bash
+./clean.sh
+```
+
+### Build script (build.sh)
+
+This script is similar to clean.sh but only migrates (no fresh):
+
+```bash
+./build.sh
+```
+
+### Run tests
+
+```bash
+composer run test
+# or
+php artisan test
+```
+
+### Generate ER Diagram
+
+```bash
+php artisan generate:erd erd.jpeg --format=jpeg
+```
+
+## Console Commands
+
+This project includes custom Artisan commands to streamline development and management tasks.
+
+### Management Create
+
+Creates a complete data management system including model, migration, Orchid screens, layouts, helpers, API controllers, routes, menus, and permissions.
+
+```bash
 php artisan management:create {name}
 ```
 
-Ví dụ:
+Example:
+```bash
+php artisan management:create Product
 ```
-php artisan management:create SignLanguageLearn
-```
 
-# Create user helper
+This command will:
+- Create the Product model and migration
+- Generate Orchid list and edit screens
+- Create API controller and routes
+- Add menu items and permissions
+- Optionally assign permissions to users
 
-Tự động tạo màn hình list, view
+### User View Create
 
-```shell
+Creates user-facing Vue.js views for listing and showing data.
+
+```bash
 php artisan user:view {name}
 ```
 
-Ví dụ:
-```
-php artisan user:view SignLanguageLearn
-```
-
-# Tạo mô hình quan hệ thực thể của database ERD
-
-```
-php artisan generate:erd
+Example:
+```bash
+php artisan user:view Product
 ```
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+This command will:
+- Create Vue.js components for list and show views
+- Add routes to web.php
+- Support both grid and list layout types
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Send Notification
 
-## About Laravel
+Sends dashboard notifications to users via Orchid's notification system.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```bash
+php artisan notification:send {title} --user_ids=1,2 --message="Welcome message" --action="/" --type="info"
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Parameters:
+- `title`: Notification title (required)
+- `--user_ids`: Comma-separated user IDs (optional, sends to all users if not specified)
+- `--message`: Notification message (optional, defaults to title)
+- `--action`: Action URL (optional)
+- `--type`: Notification type - info, success, warning, error (optional, defaults to info)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Examples:
+```bash
+# Send to all users
+php artisan notification:send "Welcome" --message="Welcome to the system"
 
-## Learning Laravel
+# Send to specific users
+php artisan notification:send "Update Available" --user_ids=1,2,3 --message="New version released" --action="/updates" --type="success"
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Project Structure
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- `app/` - Main Laravel application code
+- `resources/` - Views, CSS, JS
+- `routes/` - Route definitions
+- `database/` - Migrations, seeders, factories
+- `config/` - Laravel configuration
+- `public/` - Static assets
+- `tests/` - Unit and feature tests
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Technologies Used
 
-## Laravel Sponsors
+### Backend
+- **Laravel 12** - PHP framework
+- **Orchid Platform** - Admin panel
+- **Inertia.js** - SPA framework
+- **Jetstream** - Authentication scaffolding
+- **Sanctum** - API authentication
+- **Telescope** - Debugging tool
+- **Horizon** - Queue dashboard
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Frontend
+- **Vue.js 3** - JavaScript framework
+- **Tailwind CSS** - Utility-first CSS framework
+- **Vite** - Build tool
+- **Heroicons** - Icon library
 
-### Premium Partners
+### Database & Storage
+- **AWS S3** - File storage
+- **Excel** - Import/Export functionality
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+### Development Tools
+- **Laravel Sail** - Docker development environment
+- **Laravel Dusk** - Browser testing
+- **Pint** - Code style fixer
+- **ER Diagram Generator** - Database visualization
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request

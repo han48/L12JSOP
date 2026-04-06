@@ -101,13 +101,14 @@ Route::screen('roles', RoleListScreen::class)
 // Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.example.charts');
 // Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
 
+Route::get('logout', [\Orchid\Platform\Http\Controllers\LoginController::class, 'logout'])->name('logout.get');
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
 
 (new App\Orchid\Helpers\SendNotification())->AddRoute();
 // TODO for DEV: enable admin route
-// (new App\Orchid\Helpers\Team())->AddRoute();
-// (new App\Orchid\Helpers\UserAdditionalInformation())->AddRoute();
-// (new App\Orchid\Helpers\Transaction())->AddRoute();
-// (new App\Orchid\Helpers\Product())->AddRoute();
-// (new App\Orchid\Helpers\Post())->AddRoute();
+(new App\Orchid\Helpers\Team())->AddRoute();
+(new App\Orchid\Helpers\UserAdditionalInformation())->AddRoute();
+(new App\Orchid\Helpers\Transaction())->AddRoute();
+(new App\Orchid\Helpers\Product())->AddRoute();
+(new App\Orchid\Helpers\Post())->AddRoute();
 // (new App\Orchid\Helpers\{{ class }}())->AddRoute();

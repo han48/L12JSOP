@@ -14,10 +14,10 @@ class GenerateERD extends \BeyondCode\ErdGenerator\GenerateDiagramCommand
     public function handle()
     {
         parent::handle();
-        
+
         $filename = $this->getOutputFileName();
         $filename = pathinfo($filename, PATHINFO_FILENAME);
-        $filename = $filename . '.xlsx';
+        $filename = base_path($filename . '.xlsx');
         Excel::store(new ERD(), $filename);
     }
 }

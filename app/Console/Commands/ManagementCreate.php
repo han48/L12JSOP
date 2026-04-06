@@ -104,7 +104,7 @@ class ManagementCreate extends Command
             if (!file_exists($route_api_path)) {
                 $this->info("=> routes/api is not exist!");
             } else {
-                $keyword_route = "        // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,";
+                $keyword_route = "            // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,";
                 $route = $keyword_route;
                 $route = Str::replace("// ", "", $route);
                 $route = Str::replace("{{ class }}", ucfirst($name), $route);

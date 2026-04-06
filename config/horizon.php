@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'enabled' => env('HORIZON_ENABLED', false),
+    'enabled' => env('HORIZON_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------

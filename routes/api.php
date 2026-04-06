@@ -5,41 +5,43 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+if (config('fortify.user.enable', false)) {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
 
-ROute::middleware([
-    'auth:sanctum',
+    ROute::middleware([
+        'auth:sanctum',
 
-])->group(function ($route) {
-    $route->post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-    $route->get('/user', function (Request $request) {
-        return $request->user();
-    });
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'web',
-    'verified',
-    \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class
-])->group(function ($route) {
-    $route->prefix('notifications')
-        ->name('notifications.')
-        ->group(function ($route) {
-            $route->get('/', [UserNotificationController::class, 'index'])->name('index');
-            $route->get('/unread', [UserNotificationController::class, 'unreadNotification'])->name('unread');
-            $route->delete('/removeAll', [UserNotificationController::class, 'removeAll'])->name('remove.all');
-            $route->post('/markAllAsRead', [UserNotificationController::class, 'markAllAsRead'])->name('mark.read.all');
-            $route->post('/maskNotification', [UserNotificationController::class, 'maskNotification'])->name('mark.read');
+    ])->group(function ($route) {
+        $route->post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+        $route->get('/user', function (Request $request) {
+            return $request->user();
         });
+    });
 
-    $route->resources([
-        // TODO for DEV: enable api route
-        // 'posts' => \App\Http\Controllers\Api\PostController::class,
-        // 'products' => \App\Http\Controllers\Api\ProductController::class,
-        // 'transactions' => \App\Http\Controllers\Api\TransactionController::class,
-        // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
-    ]);
-});
+    Route::middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'web',
+        'verified',
+        \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class
+    ])->group(function ($route) {
+        $route->prefix('notifications')
+            ->name('notifications.')
+            ->group(function ($route) {
+                $route->get('/', [UserNotificationController::class, 'index'])->name('index');
+                $route->get('/unread', [UserNotificationController::class, 'unreadNotification'])->name('unread');
+                $route->delete('/removeAll', [UserNotificationController::class, 'removeAll'])->name('remove.all');
+                $route->post('/markAllAsRead', [UserNotificationController::class, 'markAllAsRead'])->name('mark.read.all');
+                $route->post('/maskNotification', [UserNotificationController::class, 'maskNotification'])->name('mark.read');
+            });
+
+        $route->resources([
+            // TODO for DEV: enable api route
+            'posts' => \App\Http\Controllers\Api\PostController::class,
+            'products' => \App\Http\Controllers\Api\ProductController::class,
+            'transactions' => \App\Http\Controllers\Api\TransactionController::class,
+            // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
+        ]);
+    });
+}

@@ -46,7 +46,7 @@ return [
     */
 
     'user' => [
-        'enable' => false,
+        'enable' => true,
     ],
 
     'username' => 'email',
@@ -79,7 +79,7 @@ return [
 
     'home' => '/dashboard',
     'home_page' => [
-        'enable' => false,
+        'enable' => true,
     ],
 
     /*

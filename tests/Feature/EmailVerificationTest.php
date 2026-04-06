@@ -14,6 +14,15 @@ class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! config('fortify.user.enable', false)) {
+            $this->markTestSkipped('Fortify user authentication is disabled');
+        }
+    }
+
     public function test_email_verification_screen_can_be_rendered(): void
     {
         if (! Features::enabled(Features::emailVerification())) {

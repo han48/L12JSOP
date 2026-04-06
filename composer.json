@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "aws/aws-sdk-php": "^3.351",
+        "aws/aws-sdk-php": "^3.229",
         "bensampo/laravel-enum": "^6.12",
         "beyondcode/laravel-er-diagram-generator": "^4.0",
         "codiksh/version": "^11.0",
@@ -50,11 +50,15 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "Composer\\Config::disableProcessTimeout"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
+            "Composer\\Config::disableProcessTimeout",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [

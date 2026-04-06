@@ -13,18 +13,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('slug', 1024)->nullable();
-            $table->string('name', 1024);
-            $table->string('image', 2048)->nullable();
-            $table->decimal('price', 20, 2)->default(0);
-            $table->decimal('quantity', 20, 2)->default(-1);
-            $table->text('description')->nullable();
-            $table->string('categories', 1024)->nullable();
-            $table->string('tags', 1024)->nullable();
-            $table->string('currency')->default('USD');
-            $table->tinyInteger('status')->default(0);
-            $table->softDeletes();
+            $table->id()->comment('Product ID');
+            $table->string('slug', 1024)->nullable()->comment('Slug');
+            $table->string('name', 1024)->comment('Name');
+            $table->string('image', 2048)->nullable()->comment('Image');
+            $table->decimal('price', 20, 2)->default(0)->comment('Price');
+            $table->decimal('quantity', 20, 2)->default(-1)->comment('Quantity');
+            $table->text('description')->nullable()->comment('Description');
+            $table->string('categories', 1024)->nullable()->comment('Categories');
+            $table->string('tags', 1024)->nullable()->comment('Tags');
+            $table->string('currency')->default('USD')->comment('Currency');
+            $table->tinyInteger('status')->default(0)->comment('Status');
+            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
         });
         try {

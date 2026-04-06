@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('personal_access_tokens', function (Blueprint $table) {
-            $table->id();
+            $table->id()->comment('token id');
             $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->string('name')->comment('token name');
+            $table->string('token', 64)->unique()->comment('token');
+            $table->text('abilities')->nullable()->comment('authority');
+            $table->timestamp('last_used_at')->nullable()->comment('last use date');
+            $table->timestamp('expires_at')->nullable()->comment('date of expiry');
             $table->timestamps();
         });
     }

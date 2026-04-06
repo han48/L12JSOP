@@ -13,17 +13,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('author_id');
-            $table->string('slug')->unique()->nullable();
-            $table->string('title');
-            $table->string('image', 2048)->nullable();
-            $table->text('html');
-            $table->text('description')->nullable();
-            $table->string('categories', 1024)->nullable();
-            $table->string('tags', 1024)->nullable();
-            $table->tinyInteger('status')->default(0);
-            $table->softDeletes();
+            $table->id()->comment('Post ID');
+            $table->foreignId('author_id')->comment('Author ID');
+            $table->string('slug')->unique()->nullable()->comment('Slug');
+            $table->string('title')->comment('Title');
+            $table->string('image', 2048)->nullable()->comment('Image');
+            $table->text('html')->comment('HTML Content');
+            $table->text('description')->nullable()->comment('Description');
+            $table->string('categories', 1024)->nullable()->comment('Categories');
+            $table->string('tags', 1024)->nullable()->comment('Tags');
+            $table->tinyInteger('status')->default(0)->comment('Status');
+            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
         });
         try {
@@ -33,20 +33,20 @@ return new class extends Migration
         }
 
         Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('author_id');
-            $table->foreignId('post_id');
-            $table->text('content');
-            $table->tinyInteger('status')->default(0);
-            $table->softDeletes();
+            $table->id()->comment('Comment ID');
+            $table->foreignId('author_id')->comment('Author ID');
+            $table->foreignId('post_id')->comment('Post ID');
+            $table->text('content')->comment('Content');
+            $table->tinyInteger('status')->default(0)->comment('Status');
+            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
         });
 
         Schema::create('viewers', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('author_id');
-            $table->foreignId('post_id');
-            $table->tinyInteger('status')->default(0);
+            $table->id()->comment('Viewer ID');
+            $table->foreignId('author_id')->comment('Author ID');
+            $table->foreignId('post_id')->comment('Post ID');
+            $table->tinyInteger('status')->default(0)->comment('Status');
             $table->timestamps();
         });
     }
