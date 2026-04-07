@@ -130,7 +130,6 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('telescope')
                 ->permission('platform.systems.telescope'),
 
-
             Menu::make(__('Horizon'))
                 ->icon('bs.journal')
                 ->route('horizon.index')

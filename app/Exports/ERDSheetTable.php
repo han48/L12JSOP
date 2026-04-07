@@ -46,8 +46,10 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
         'viewers' => 'Table viewers, used to manage viewers in posts.',
         'created_at' => 'Created at timestamp.',
         'updated_at' => 'Updated at timestamp.',
+        'deleted_at' => 'Deleted at timestamp.',
         'created_by' => 'Created by user id.',
         'updated_by' => 'Updated by user id.',
+        'deleted_by' => 'Deleted by user id.',
     ];
 
     public function __construct($table) {

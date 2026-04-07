@@ -1,6 +1,6 @@
 composer install
 npm install
-npm run build
+vite build
 php artisan clear-compiled
 php artisan route:clear
 php artisan event:clear
