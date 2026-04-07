@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('team_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_id');
-            $table->foreignId('user_id');
-            $table->string('role')->nullable();
+            $table->id()->comment('Team user ID');
+            $table->foreignId('team_id')->comment('Team ID');
+            $table->foreignId('user_id')->comment('User ID');
+            $table->string('role')->nullable()->comment('roll');
             $table->timestamps();
 
-            $table->unique(['team_id', 'user_id']);
+            $table->unique(['team_id', 'user_id'])->comment('Unique constraint for combination of team ID and user ID');
         });
     }
 

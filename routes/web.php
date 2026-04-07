@@ -35,7 +35,7 @@ Route::middleware([
 ])->group(function ($route) {
     $route->resources([
         // TODO for DEV: enable web route
-        // 'posts' => \App\Http\Controllers\Api\PostController::class,
+        'posts' => \App\Http\Controllers\Api\PostController::class,
         // '{{ table }}' => \App\Http\Controllers\Api\{{ class }}Controller::class,
     ]);
 });

@@ -13,6 +13,15 @@ class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! config('fortify.user.enable', false)) {
+            $this->markTestSkipped('Fortify user authentication is disabled');
+        }
+    }
+
     public function test_reset_password_link_screen_can_be_rendered(): void
     {
         if (! Features::enabled(Features::resetPasswords())) {

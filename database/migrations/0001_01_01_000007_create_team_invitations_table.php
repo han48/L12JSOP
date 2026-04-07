@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('team_invitations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
-            $table->string('email');
-            $table->string('role')->nullable();
+            $table->id()->comment('Team Invitation ID');
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete()->comment('Team ID');
+            $table->string('email')->comment('Email Address');
+            $table->string('role')->nullable()->comment('Role');
             $table->timestamps();
 
-            $table->unique(['team_id', 'email']);
+            $table->unique(['team_id', 'email'])->comment('Unique constraint for Team ID and Email Address');
         });
     }
 

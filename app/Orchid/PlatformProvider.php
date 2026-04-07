@@ -38,62 +38,62 @@ class PlatformProvider extends OrchidServiceProvider
         if (true === filter_var(env('DEV_MODE', false), FILTER_VALIDATE_BOOLEAN)) {
             $devMenu = [];
             // TODO for DEV: enable dev menu
-            // $devMenu = [
-            //     Menu::make('')->title('Navigation'),
+            $devMenu = [
+                Menu::make('')->title('Navigation'),
 
-            //     Menu::make('Get Started')
-            //         ->icon('bs.book')
-            //         ->route(config('platform.index')),
+                Menu::make('Get Started')
+                    ->icon('bs.book')
+                    ->route(config('platform.index')),
 
-            //     Menu::make('Sample Screen')
-            //         ->icon('bs.collection')
-            //         ->route('platform.example')
-            //         ->badge(fn() => 6),
+                Menu::make('Sample Screen')
+                    ->icon('bs.collection')
+                    ->route('platform.example')
+                    ->badge(fn() => 6),
 
-            //     Menu::make('Form Elements')
-            //         ->icon('bs.card-list')
-            //         ->route('platform.example.fields')
-            //         ->active('*/examples/form/*'),
+                Menu::make('Form Elements')
+                    ->icon('bs.card-list')
+                    ->route('platform.example.fields')
+                    ->active('*/examples/form/*'),
 
-            //     Menu::make('Layouts Overview')
-            //         ->icon('bs.window-sidebar')
-            //         ->route('platform.example.layouts'),
+                Menu::make('Layouts Overview')
+                    ->icon('bs.window-sidebar')
+                    ->route('platform.example.layouts'),
 
-            //     Menu::make('Grid System')
-            //         ->icon('bs.columns-gap')
-            //         ->route('platform.example.grid'),
+                Menu::make('Grid System')
+                    ->icon('bs.columns-gap')
+                    ->route('platform.example.grid'),
 
-            //     Menu::make('Charts')
-            //         ->icon('bs.bar-chart')
-            //         ->route('platform.example.charts'),
+                Menu::make('Charts')
+                    ->icon('bs.bar-chart')
+                    ->route('platform.example.charts'),
 
-            //     Menu::make('Cards')
-            //         ->icon('bs.card-text')
-            //         ->route('platform.example.cards')
-            //         ->divider(),
+                Menu::make('Cards')
+                    ->icon('bs.card-text')
+                    ->route('platform.example.cards')
+                    ->divider(),
 
-            //     Menu::make('')->title('Docs'),
+                Menu::make('')->title('Docs'),
 
-            //     Menu::make('Documentation')
-            //         ->icon('bs.box-arrow-up-right')
-            //         ->url('https://orchid.software/en/docs')
-            //         ->target('_blank'),
+                Menu::make('Documentation')
+                    ->icon('bs.box-arrow-up-right')
+                    ->url('https://orchid.software/en/docs')
+                    ->target('_blank'),
 
-            //     Menu::make('Changelog')
-            //         ->icon('bs.box-arrow-up-right')
-            //         ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-            //         ->target('_blank')
-            //         ->badge(fn() => Dashboard::version(), Color::DARK),
+                Menu::make('Changelog')
+                    ->icon('bs.box-arrow-up-right')
+                    ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
+                    ->target('_blank')
+                    ->badge(fn() => Dashboard::version(), Color::DARK),
 
-            //     Menu::make('')->divider(),
-            // ];
+                Menu::make('')->divider(),
+            ];
         } else {
             $devMenu = [];
         }
 
         $adminMenu = [
             // TODO for DEV: enable admin menu
-            // Menu::make('')->title(__('Access Controls')),
+            Menu::make('')->title(__('Access Controls')),
 
             Menu::make(__('Users'))
                 ->icon('bs.people')
@@ -106,36 +106,36 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.roles'),
 
             // TODO for DEV: enable admin menu
-            // Menu::make('')->title(__('Management')),
+            Menu::make('')->title(__('Management')),
         ];
 
         $menu = array_merge($menu, $adminMenu);
 
         $menu = (new \App\Orchid\Helpers\SendNotification)->AddMenus($menu);
         // TODO for DEV: enable admin menu
-        // $menu = (new \App\Orchid\Helpers\Team)->AddMenus($menu);
-        // $menu = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddMenus($menu);
-        // $menu = (new \App\Orchid\Helpers\Product)->AddMenus($menu);
-        // $menu = (new \App\Orchid\Helpers\Transaction)->AddMenus($menu);
-        // $menu = (new \App\Orchid\Helpers\Post)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\Team)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\Product)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\Transaction)->AddMenus($menu);
+        $menu = (new \App\Orchid\Helpers\Post)->AddMenus($menu);
         // $menu = (new \App\Orchid\Helpers\{{ class }})->AddMenus($menu);
 
         $debugMenu = [];
         // TODO for DEV: enable debug menu
-        // $debugMenu = [
-        //     Menu::make('')->title(__('DEBUG')),
+        $debugMenu = [
+            Menu::make('')->title(__('DEBUG')),
 
-        //     Menu::make(__('Telescope'))
-        //         ->icon('bs.people')
-        //         ->route('telescope')
-        //         ->permission('platform.systems.telescope'),
+            Menu::make(__('Telescope'))
+                ->icon('bs.people')
+                ->route('telescope')
+                ->permission('platform.systems.telescope'),
 
 
-        //     Menu::make(__('Horizon'))
-        //         ->icon('bs.journal')
-        //         ->route('horizon.index')
-        //         ->permission('platform.systems.horizon'),
-        // ];
+            Menu::make(__('Horizon'))
+                ->icon('bs.journal')
+                ->route('horizon.index')
+                ->permission('platform.systems.horizon'),
+        ];
 
         $menu = array_merge($menu, $debugMenu);
 
@@ -159,11 +159,11 @@ class PlatformProvider extends OrchidServiceProvider
 
         $permissions = (new \App\Orchid\Helpers\SendNotification)->AddPermissions($permissions);
         // TODO for DEV: enable admin permisson
-        // $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
-        // $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
-        // $permissions = (new \App\Orchid\Helpers\Product)->AddPermissions($permissions);
-        // $permissions = (new \App\Orchid\Helpers\Transaction)->AddPermissions($permissions);
-        // $permissions = (new \App\Orchid\Helpers\Post)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\Team)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\UserAdditionalInformation)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\Product)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\Transaction)->AddPermissions($permissions);
+        $permissions = (new \App\Orchid\Helpers\Post)->AddPermissions($permissions);
         // $permissions = (new \App\Orchid\Helpers\{{ class }})->AddPermissions($permissions);
 
         return [

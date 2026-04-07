@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
 use Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController;
 use Laravel\Fortify\Http\Controllers\ConfirmedTwoFactorAuthenticationController;
@@ -23,6 +23,7 @@ use Laravel\Fortify\RoutePath;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
+    $limiter = config('fortify.limiters.login');
 
     if (config('fortify.user.enable', false)) {
         // Authentication...
@@ -32,7 +33,6 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('login');
         }
 
-        $limiter = config('fortify.limiters.login');
         $twoFactorLimiter = config('fortify.limiters.two-factor');
         $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
@@ -45,6 +45,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::post(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
             ->middleware([config('fortify.auth_middleware', 'auth') . ':' . config('fortify.guard')])
             ->name('logout');
+
+        Route::get(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
+            ->middleware([config('fortify.auth_middleware', 'auth') . ':' . config('fortify.guard')])
+            ->name('logout.get');
 
         // Password Reset...
         if (Features::enabled(Features::resetPasswords())) {
@@ -171,5 +175,20 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             Route::post(RoutePath::for('two-factor.recovery-codes', '/user/two-factor-recovery-codes'), [RecoveryCodeController::class, 'store'])
                 ->middleware($twoFactorMiddleware);
         }
+    } else {
+        // Authentication...
+        if ($enableViews) {
+            Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
+                ->middleware(['guest:' . config('fortify.guard')])
+                ->name('login');
+        }
+
+        $limiter = config('fortify.limiters.login');
+
+        Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
+            ->middleware(array_filter([
+                'guest:' . config('fortify.guard'),
+                $limiter ? 'throttle:' . $limiter : null,
+            ]))->name('login.store');
     }
 });

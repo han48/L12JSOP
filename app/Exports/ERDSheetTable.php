@@ -44,6 +44,10 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
         'user_additional_informations' => 'Table user additional information, used to manage additional information for user.',
         'user' => 'Table of Laravel Framwork, used to manage users.',
         'viewers' => 'Table viewers, used to manage viewers in posts.',
+        'created_at' => 'Created at timestamp.',
+        'updated_at' => 'Updated at timestamp.',
+        'created_by' => 'Created by user id.',
+        'updated_by' => 'Updated by user id.',
     ];
 
     public function __construct($table) {
@@ -65,6 +69,9 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
             $nn = $column->Null === 'NO' ? true : false;
             $default = $column->Default;
             $comment = $column->Comment;
+            if (empty($comment) && array_key_exists($name, $this->comments)) {
+                $comment = $this->comments[$name];
+            }
             array_push($result, [
                 $name, $type, $key, $nn, $default, $comment,
             ]);
@@ -132,7 +139,7 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
                         'startColor' => ['argb' => '4CAF50'], // Green background
                     ],
                 ]);
-                $sheet->mergeCells('B1:F1'); 
+                $sheet->mergeCells('B1:F1');
                 $sheet->getStyle('A2:F2')->applyFromArray([
                     'font' => [
                         'bold' => true,

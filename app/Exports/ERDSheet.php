@@ -24,7 +24,7 @@ class ERDSheet implements WithTitle, WithDrawings
         $drawing = new Drawing();
         $drawing->setName('ERD');
         $drawing->setDescription('ERD');
-        $drawing->setPath(storage_path('app/private/erd.jpeg'));
+        $drawing->setPath(base_path('erd.jpeg'));
         $drawing->setHeight(2000);
         $drawing->setCoordinates('B2');
 

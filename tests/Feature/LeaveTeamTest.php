@@ -10,6 +10,15 @@ class LeaveTeamTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! \Laravel\Jetstream\Features::hasTeamFeatures()) {
+            $this->markTestSkipped('Jetstream team features are not enabled');
+        }
+    }
+
     public function test_users_can_leave_teams(): void
     {
         $user = User::factory()->withPersonalTeam()->create();

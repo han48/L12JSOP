@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_additional_informations', function (Blueprint $table) {
-            $table->id();
-            $table->string('slug');
-            $table->string('name');
-            $table->string('memo');
+            $table->id()->comment('User Additional Information ID');
+            $table->string('slug')->comment('Slug');
+            $table->string('name')->comment('Name');
+            $table->string('memo')->comment('Memo');
             $table->timestamps();
         });
 
         Schema::create('user_additional_information_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('user_additional_information_id');
-            $table->string('value');
+            $table->id()->comment('User Additional Information Relation ID');
+            $table->foreignId('user_id')->comment('User ID');
+            $table->foreignId('user_additional_information_id')->comment('User Additional Information ID');
+            $table->string('value')->comment('Value');
             $table->timestamps();
         });
     }

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->index();
-            $table->string('name');
-            $table->boolean('personal_team');
+            $table->id()->comment('Team ID');
+            $table->foreignId('user_id')->index()->comment('User ID');
+            $table->string('name')->comment('Team name');
+            $table->boolean('personal_team')->comment('personal team flag');
             $table->timestamps();
         });
     }

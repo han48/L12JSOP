@@ -12,36 +12,37 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attachments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->text('name');
-            $table->text('original_name');
-            $table->string('mime');
-            $table->string('extension')->nullable();
-            $table->bigInteger('size')->default(0);
-            $table->integer('sort')->default(0);
-            $table->text('path');
-            $table->text('description')->nullable();
-            $table->text('alt')->nullable();
-            $table->text('hash')->nullable();
-            $table->string('disk')->default('public');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('group')->nullable();
+            $table->increments('id')->comment('Attachment ID');
+            $table->text('name')->comment('File Name');
+            $table->text('original_name')->comment('Original File Name');
+            $table->string('mime')->comment('MIME Type');
+            $table->string('extension')->nullable()->comment('File Extension');
+            $table->bigInteger('size')->default(0)->comment('File Size');
+            $table->integer('sort')->default(0)->comment('Sort Order');
+            $table->text('path')->comment('File Path');
+            $table->text('description')->nullable()->comment('Description');
+            $table->text('alt')->nullable()->comment('Alt Text');
+            $table->text('hash')->nullable()->comment('Hash');
+            $table->string('disk')->default('public')->comment('Disk');
+            $table->unsignedBigInteger('user_id')->nullable()->comment('User ID');
+            $table->string('group')->nullable()->comment('Group');
             $table->timestamps();
         });
 
         Schema::create('attachmentable', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('attachmentable_type');
-            $table->unsignedInteger('attachmentable_id');
-            $table->unsignedInteger('attachment_id');
+            $table->increments('id')->comment('Attachment Relation ID');
+            $table->string('attachmentable_type')->comment('Related Type');
+            $table->unsignedInteger('attachmentable_id')->comment('Related ID');
+            $table->unsignedInteger('attachment_id')->comment('Attachment ID');
 
-            $table->index(['attachmentable_type', 'attachmentable_id']);
+            $table->index(['attachmentable_type', 'attachmentable_id'])->comment('Related Index');
 
             $table->foreign('attachment_id')
                 ->references('id')
                 ->on('attachments')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+                ->comment('Foreign key constraint for Attachment ID');
         });
     }
 

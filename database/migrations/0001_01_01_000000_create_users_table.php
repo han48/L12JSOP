@@ -12,31 +12,31 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->id()->comment('User ID');
+            $table->string('name')->comment('username');
+            $table->string('email')->unique()->comment('email address');
+            $table->timestamp('email_verified_at')->nullable()->comment('Email address confirmation date and time');
+            $table->string('password')->comment('password');
+            $table->rememberToken()->comment('Token to stay logged in');
+            $table->foreignId('current_team_id')->nullable()->comment('Current team ID');
+            $table->string('profile_photo_path', 2048)->nullable()->comment('Profile photo path');
+            $table->tinyInteger('status')->default(1)->comment('user state');
             $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->string('email')->primary()->comment('email address');
+            $table->string('token')->comment('password reset token');
+            $table->timestamp('created_at')->nullable()->comment('Creation date and time');
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
+            $table->string('id')->primary()->comment('Session ID');
+            $table->foreignId('user_id')->nullable()->index()->comment('User ID');
+            $table->string('ip_address', 45)->nullable()->comment('IP address');
+            $table->text('user_agent')->nullable()->comment('user agent');
+            $table->longText('payload')->comment('session data');
+            $table->integer('last_activity')->index()->comment('Last event date');
         });
     }
 

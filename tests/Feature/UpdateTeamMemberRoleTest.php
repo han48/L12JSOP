@@ -10,6 +10,15 @@ class UpdateTeamMemberRoleTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! \Laravel\Jetstream\Features::hasTeamFeatures()) {
+            $this->markTestSkipped('Jetstream team features are not enabled');
+        }
+    }
+
     public function test_team_member_roles_can_be_updated(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());

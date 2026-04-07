@@ -84,30 +84,31 @@ Route::screen('roles', RoleListScreen::class)
         ->parent('platform.index')
         ->push(__('Roles'), route('platform.systems.roles')));
 
-// // Example...
-// Route::screen('example', ExampleScreen::class)
-//     ->name('platform.example')
-//     ->breadcrumbs(fn(Trail $trail) => $trail
-//         ->parent('platform.index')
-//         ->push('Example Screen'));
+// Example...
+Route::screen('example', ExampleScreen::class)
+    ->name('platform.example')
+    ->breadcrumbs(fn(Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Example Screen'));
 
-// Route::screen('/examples/form/fields', ExampleFieldsScreen::class)->name('platform.example.fields');
-// Route::screen('/examples/form/advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
-// Route::screen('/examples/form/editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
-// Route::screen('/examples/form/actions', ExampleActionsScreen::class)->name('platform.example.actions');
+Route::screen('/examples/form/fields', ExampleFieldsScreen::class)->name('platform.example.fields');
+Route::screen('/examples/form/advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
+Route::screen('/examples/form/editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
+Route::screen('/examples/form/actions', ExampleActionsScreen::class)->name('platform.example.actions');
 
-// Route::screen('/examples/layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
-// Route::screen('/examples/grid', ExampleGridScreen::class)->name('platform.example.grid');
-// Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.example.charts');
-// Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
+Route::screen('/examples/layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
+Route::screen('/examples/grid', ExampleGridScreen::class)->name('platform.example.grid');
+Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.example.charts');
+Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
 
+Route::get('logout', [\Orchid\Platform\Http\Controllers\LoginController::class, 'logout'])->name('logout.get');
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
 
 (new App\Orchid\Helpers\SendNotification())->AddRoute();
 // TODO for DEV: enable admin route
-// (new App\Orchid\Helpers\Team())->AddRoute();
-// (new App\Orchid\Helpers\UserAdditionalInformation())->AddRoute();
-// (new App\Orchid\Helpers\Transaction())->AddRoute();
-// (new App\Orchid\Helpers\Product())->AddRoute();
-// (new App\Orchid\Helpers\Post())->AddRoute();
+(new App\Orchid\Helpers\Team())->AddRoute();
+(new App\Orchid\Helpers\UserAdditionalInformation())->AddRoute();
+(new App\Orchid\Helpers\Transaction())->AddRoute();
+(new App\Orchid\Helpers\Product())->AddRoute();
+(new App\Orchid\Helpers\Post())->AddRoute();
 // (new App\Orchid\Helpers\{{ class }}())->AddRoute();

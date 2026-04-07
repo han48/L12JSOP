@@ -10,6 +10,15 @@ class CreateTeamTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! \Laravel\Jetstream\Features::hasTeamFeatures()) {
+            $this->markTestSkipped('Jetstream team features are not enabled');
+        }
+    }
+
     public function test_teams_can_be_created(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
