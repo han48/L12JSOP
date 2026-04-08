@@ -13,6 +13,7 @@ return new class extends Migration
     {
 
         Schema::create('transactions', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage transactions.');
             $table->id()->comment('Transaction ID');
             $table->foreignId('user_id')->nullable()->comment('User ID');
             $table->string('code', 512)->unique()->comment('Code');
@@ -24,11 +25,12 @@ return new class extends Migration
             $table->decimal('tax', 20, 2)->default(0)->comment('Tax');
             $table->string('currency')->default('USD')->comment('Currency');
             $table->tinyInteger('status')->default(0)->comment('Status');
-            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
+            $table->softDeletes()->comment('Soft Delete');
         });
 
         Schema::create('order_items', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage order items.');
             $table->id()->comment('Order Item ID');
             $table->foreignId('transaction_id')->nullable()->comment('Transaction ID');
             $table->foreignId('product_id')->nullable()->comment('Product ID');
@@ -36,8 +38,8 @@ return new class extends Migration
             $table->decimal('quantity', 20, 2)->default(0)->comment('Quantity');
             $table->string('currency')->default('USD')->comment('Currency');
             $table->tinyInteger('status')->default(0)->comment('Status');
-            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
+            $table->softDeletes()->comment('Soft Delete');
         });
     }
 

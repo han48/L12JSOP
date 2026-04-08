@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attachments', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage attachments.');
             $table->increments('id')->comment('Attachment ID');
             $table->text('name')->comment('File Name');
             $table->text('original_name')->comment('Original File Name');
@@ -30,6 +31,7 @@ return new class extends Migration
         });
 
         Schema::create('attachmentable', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage attachment relations.');
             $table->increments('id')->comment('Attachment Relation ID');
             $table->string('attachmentable_type')->comment('Related Type');
             $table->unsignedInteger('attachmentable_id')->comment('Related ID');

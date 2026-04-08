@@ -15,6 +15,7 @@ return new class extends Migration
     {
         if (! Schema::hasTable('notifications')) {
             Schema::create('notifications', function (Blueprint $table) {
+                $table->comment('Table of Laravel Framwork, used to manage notifications.');
                 $table->uuid('id')->primary()->comment('Notification ID');
                 $table->string('type')->comment('Notification type');
                 $table->morphs('notifiable');

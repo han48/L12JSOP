@@ -13,6 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage products.');
             $table->id()->comment('Product ID');
             $table->string('slug', 1024)->nullable()->comment('Slug');
             $table->string('name', 1024)->comment('Name');
@@ -24,8 +25,8 @@ return new class extends Migration
             $table->string('tags', 1024)->nullable()->comment('Tags');
             $table->string('currency')->default('USD')->comment('Currency');
             $table->tinyInteger('status')->default(0)->comment('Status');
-            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
+            $table->softDeletes()->comment('Soft Delete');
         });
         try {
             DB::statement('ALTER TABLE products ADD FULLTEXT `search` (`description`, `categories`, `tags`)');

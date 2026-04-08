@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('personal_access_tokens', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage personal access.');
             $table->id()->comment('token id');
             $table->morphs('tokenable');
             $table->string('name')->comment('token name');

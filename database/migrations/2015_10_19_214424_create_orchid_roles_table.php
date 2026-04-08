@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('roles', function (Blueprint $table): void {
+            $table->comment('Table of Laravel Framwork, used to manage roles.');
             $table->increments('id')->comment('Role ID');
             $table->string('slug')->unique()->comment('Slug');
             $table->string('name')->comment('Role Name');

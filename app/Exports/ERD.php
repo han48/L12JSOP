@@ -12,40 +12,49 @@ class ERD implements WithMultipleSheets
 
     public function sheets(): array
     {
-        $tables = DB::select('SHOW TABLES');
-        usort($tables, function ($a, $b) {
-            $special = [
-                'jobs', 'job_batches','failed_jobs',
-                'cache', 'cache_locks',
-                'role_users', 'roles',
-                'attachmentable', 'attachments',
-                'password_reset_tokens',
-                'personal_access_tokens', 'sessions',
-                'teams', 'team_user', 'team_invitations',
-                'telescope_entries', 'telescope_entries_tags', 'telescope_monitoring',
-                'migrations',
-            ];
+        $defaults = [
+            'users',
+        ];
 
-            $default = [
-                'users',
-            ];
+        $special = [
+            'jobs',
+            'job_batches',
+            'failed_jobs',
+            'cache',
+            'cache_locks',
+            'role_users',
+            'roles',
+            'attachmentable',
+            'attachments',
+            'password_reset_tokens',
+            'personal_access_tokens',
+            'sessions',
+            'teams',
+            'team_user',
+            'team_invitations',
+            'telescope_entries',
+            'telescope_entries_tags',
+            'telescope_monitoring',
+            'migrations',
+        ];
+        $tables = DB::select('SELECT table_name, table_comment FROM information_schema.tables WHERE table_schema = DATABASE()');
+        usort($tables, function ($a, $b) use($special, $defaults) {
 
-            $aIsSpecial = in_array($a->Tables_in_fitness, $special);
-            $bIsSpecial = in_array($b->Tables_in_fitness, $special);
-            $aIsNormal = in_array($a->Tables_in_fitness, $default);
-            $bIsNormal = in_array($b->Tables_in_fitness, $default);
+            $aIsSpecial = in_array($a->{'TABLE_NAME'}, $special);
+            $bIsSpecial = in_array($b->{'TABLE_NAME'}, $special);
+            $aIsNormal = in_array($a->{'TABLE_NAME'}, $defaults);
+            $bIsNormal = in_array($b->{'TABLE_NAME'}, $defaults);
 
             if ($aIsNormal && !$bIsNormal) return -1;
             if ($aIsSpecial && !$bIsSpecial) return 1;
             if (!$aIsSpecial && $bIsSpecial) return -1;
 
-            return strcmp($a->Tables_in_fitness, $b->Tables_in_fitness);
+            return strcmp($a->{'TABLE_NAME'}, $b->{'TABLE_NAME'});
         });
 
         $result = [new ERDSheet("ERD")];
-        foreach ($tables as $value) {
-            $table = array_values(get_object_vars($value))[0];
-            array_push($result, new ERDSheetTable($table));
+        foreach ($tables as $table) {
+            array_push($result, new ERDSheetTable($table->{'TABLE_NAME'}, $table->{'TABLE_COMMENT'}));
         }
         return $result;
     }

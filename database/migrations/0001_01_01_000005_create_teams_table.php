@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('teams', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage teams.');
             $table->id()->comment('Team ID');
             $table->foreignId('user_id')->index()->comment('User ID');
             $table->string('name')->comment('Team name');

@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('team_invitations', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage team invitations.');
             $table->id()->comment('Team Invitation ID');
             $table->foreignId('team_id')->constrained()->cascadeOnDelete()->comment('Team ID');
             $table->string('email')->comment('Email Address');

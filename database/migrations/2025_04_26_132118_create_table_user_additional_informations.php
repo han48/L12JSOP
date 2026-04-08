@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_additional_informations', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage user additional informations.');
             $table->id()->comment('User Additional Information ID');
             $table->string('slug')->comment('Slug');
             $table->string('name')->comment('Name');
@@ -20,6 +21,7 @@ return new class extends Migration
         });
 
         Schema::create('user_additional_information_user', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage user additional information relations.');
             $table->id()->comment('User Additional Information Relation ID');
             $table->foreignId('user_id')->comment('User ID');
             $table->foreignId('user_additional_information_id')->comment('User Additional Information ID');

@@ -13,6 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage posts.');
             $table->id()->comment('Post ID');
             $table->foreignId('author_id')->comment('Author ID');
             $table->string('slug')->unique()->nullable()->comment('Slug');
@@ -23,8 +24,8 @@ return new class extends Migration
             $table->string('categories', 1024)->nullable()->comment('Categories');
             $table->string('tags', 1024)->nullable()->comment('Tags');
             $table->tinyInteger('status')->default(0)->comment('Status');
-            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
+            $table->softDeletes()->comment('Soft Delete');
         });
         try {
             DB::statement('ALTER TABLE posts ADD FULLTEXT `search` (`description`, `categories`, `tags`)');
@@ -33,16 +34,18 @@ return new class extends Migration
         }
 
         Schema::create('comments', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage comments.');
             $table->id()->comment('Comment ID');
             $table->foreignId('author_id')->comment('Author ID');
             $table->foreignId('post_id')->comment('Post ID');
             $table->text('content')->comment('Content');
             $table->tinyInteger('status')->default(0)->comment('Status');
-            $table->softDeletes()->comment('Soft Delete');
             $table->timestamps();
+            $table->softDeletes()->comment('Soft Delete');
         });
 
         Schema::create('viewers', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage viewers.');
             $table->id()->comment('Viewer ID');
             $table->foreignId('author_id')->comment('Author ID');
             $table->foreignId('post_id')->comment('Post ID');

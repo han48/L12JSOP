@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jobs', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage job and queue.');
             $table->id()->comment('job ID');
             $table->string('queue')->index()->comment('queue');
             $table->longText('payload')->comment('payload');
@@ -22,6 +23,7 @@ return new class extends Migration
         });
 
         Schema::create('job_batches', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage job batches.');
             $table->string('id')->primary()->comment('Job batch ID');
             $table->string('name')->comment('batch name');
             $table->integer('total_jobs')->comment('Total number of jobs');
@@ -35,6 +37,7 @@ return new class extends Migration
         });
 
         Schema::create('failed_jobs', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage failed jobs.');
             $table->id()->comment('Failed job ID');
             $table->string('uuid')->unique()->comment('UUID');
             $table->text('connection')->comment('connection');

@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage users.');
             $table->id()->comment('User ID');
             $table->string('name')->comment('username');
             $table->string('email')->unique()->comment('email address');
@@ -25,12 +26,14 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage user reset password.');
             $table->string('email')->primary()->comment('email address');
             $table->string('token')->comment('password reset token');
             $table->timestamp('created_at')->nullable()->comment('Creation date and time');
         });
 
         Schema::create('sessions', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage sessions.');
             $table->string('id')->primary()->comment('Session ID');
             $table->foreignId('user_id')->nullable()->index()->comment('User ID');
             $table->string('ip_address', 45)->nullable()->comment('IP address');

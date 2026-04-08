@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('role_users', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage role users.');
             $table->unsignedBigInteger('user_id')->comment('User ID');
             $table->unsignedInteger('role_id')->comment('Role ID');
             $table->primary(['user_id', 'role_id'])->comment('User Role ID');

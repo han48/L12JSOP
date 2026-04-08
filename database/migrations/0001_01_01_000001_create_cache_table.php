@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cache', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage cache.');
             $table->string('key')->primary()->comment('cache key');
             $table->mediumText('value')->comment('cache value');
             $table->integer('expiration')->comment('date of expiry');
         });
 
         Schema::create('cache_locks', function (Blueprint $table) {
+            $table->comment('Table of Laravel Framwork, used to manage cache locks.');
             $table->string('key')->primary()->comment('lock key');
             $table->string('owner')->comment('owner');
             $table->integer('expiration')->comment('date of expiry');

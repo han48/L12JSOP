@@ -22,6 +22,7 @@ return new class extends Migration
         $schema = Schema::connection($this->getConnection());
 
         $schema->create('telescope_entries', function (Blueprint $table) {
+            $table->comment('Telescope Entries Table');
             $table->bigIncrements('sequence')->comment('Sequence');
             $table->uuid('uuid')->comment('UUID');
             $table->uuid('batch_id')->comment('Batch ID');
@@ -39,6 +40,7 @@ return new class extends Migration
         });
 
         $schema->create('telescope_entries_tags', function (Blueprint $table) {
+            $table->comment('Telescope Entries Tags Table');
             $table->uuid('entry_uuid')->comment('Entry UUID');
             $table->string('tag')->comment('Tag');
 
@@ -53,6 +55,7 @@ return new class extends Migration
         });
 
         $schema->create('telescope_monitoring', function (Blueprint $table) {
+            $table->comment('Telescope Monitoring Table');
             $table->string('tag')->primary()->comment('Tag');
         });
     }

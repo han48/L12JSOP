@@ -13,23 +13,20 @@ use Illuminate\Support\Facades\DB;
 class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, WithTitle, WithEvents
 {
     protected $table = null;
+    protected $comment = null;
     protected $rows = 0;
     protected $comments = [
         'attachmentable' => 'Table of Orchid Platform, used to manage attachments.',
         'attachments' => 'Table of Orchid Platform, used to manage attachments.',
         'cache' => 'Table of Laravel Framwork, used to manage cache.',
         'cache_locks' => 'Table of Laravel Framwork, used to manage cache.',
-        'comments' => 'Table comments, used to manage comments in posts.',
         'failed_jobs' => 'Table of Laravel Framwork, used to manage job and queue.',
         'job_batches' => 'Table of Laravel Framwork, used to manage job and queue.',
         'jobs' => 'Table of Laravel Framwork, used to manage job and queue.',
         'migrations' => 'Table of Laravel Framwork, used to manage migrate.',
         'notifications' => 'Table of Orchid Platform, used to manage notification.',
-        'order_items' => 'Table order items, used to manage order item in transaction.',
         'password_reset_tokens' => 'Table of Laravel Framwork, used to manage user reset password.',
         'personal_access_tokens' => 'Table of Laravel Framwork, used to manage personal access.',
-        'posts' => 'Table posts, used to manage posts.',
-        'products' => 'Table products, use to manage products',
         'role_users' => 'Table of Orchid Platform, used to manage roles.',
         'roles' => 'Table of Orchid Platform, used to manage roles.',
         'sessions' => 'Table of Laravel Framwork, used to manage sessions.',
@@ -39,21 +36,16 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
         'telescope_entries' => 'Table of telescope, used to manage debug data.',
         'telescope_entries_tags' => 'Table of telescope, used to manage debug data.',
         'telescope_monitoring' => 'Table of telescope, used to manage debug data.',
-        'transactions' => 'Table transactions, used to manage transactions.',
-        'user_additional_information_use' => 'Table user additional information, used to manage additional information for user.',
-        'user_additional_informations' => 'Table user additional information, used to manage additional information for user.',
         'user' => 'Table of Laravel Framwork, used to manage users.',
-        'viewers' => 'Table viewers, used to manage viewers in posts.',
         'created_at' => 'Created at timestamp.',
         'updated_at' => 'Updated at timestamp.',
-        'deleted_at' => 'Deleted at timestamp.',
         'created_by' => 'Created by user id.',
         'updated_by' => 'Updated by user id.',
-        'deleted_by' => 'Deleted by user id.',
     ];
 
-    public function __construct($table) {
+    public function __construct($table, $comment = null) {
         $this->table = $table;
+        $this->comment = $comment;
     }
 
     /**
@@ -89,10 +81,15 @@ class ERDSheetTable implements FromCollection, WithHeadings, WithColumnWidths, W
 
     public function headings(): array
     {
+        if ($this->comment) {
+            $comment = $this->comment;
+        } else {
+            $comment = array_key_exists($this->table, $this->comments) ? $this->comments[$this->table] : '';
+        }
         return [
             [
                 $this->table,
-                array_key_exists($this->table, $this->comments) ? $this->comments[$this->table] : '',
+                $comment,
             ],
             [
                 'Column',
