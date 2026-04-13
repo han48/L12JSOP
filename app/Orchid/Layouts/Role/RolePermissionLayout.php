@@ -12,6 +12,21 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Rows;
 use Throwable;
 
+/**
+ * Permission checkbox layout for the Role edit screen in the Orchid admin panel.
+ *
+ * Dynamically generates a grid of CheckBox fields for every registered permission
+ * in the system. Permissions are grouped by their category title and rendered in
+ * rows of four using Orchid's Group layout. Supports indeterminate state when a
+ * user-level override differs from the role-level value.
+ *
+ * Targets the "permission" key provided by RoleEditScreen::query().
+ *
+ * @see \App\Orchid\Screens\Role\RoleEditScreen
+ * @see \Orchid\Screen\Layouts\Rows
+ *
+ * Satisfies: Requirements 5.2
+ */
 class RolePermissionLayout extends Rows
 {
     /**

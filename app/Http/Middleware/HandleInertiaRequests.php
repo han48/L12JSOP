@@ -5,6 +5,28 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+/**
+ * Middleware xử lý các yêu cầu Inertia.js và chia sẻ dữ liệu dùng chung.
+ *
+ * Middleware này kế thừa từ Inertia\Middleware và đóng vai trò là điểm trung tâm
+ * để chia sẻ các props (dữ liệu) cho tất cả các trang Inertia/Vue trong ứng dụng.
+ * Nó được đăng ký trong HTTP kernel và chạy trên mọi web request.
+ *
+ * Vai trò trong request lifecycle:
+ * - Xác định root template (blade view) được tải khi người dùng truy cập lần đầu
+ * - Quản lý asset versioning để buộc client reload khi assets thay đổi
+ * - Cung cấp shared props (auth, flash messages, v.v.) cho toàn bộ frontend
+ *
+ * @see https://inertiajs.com/server-side-setup
+ */
+/**
+ * Middleware xử lý các yêu cầu Inertia.js và chia sẻ dữ liệu dùng chung.
+ *
+ * Kế thừa từ Inertia\Middleware — xác định root template, quản lý asset versioning,
+ * và cung cấp shared props cho toàn bộ frontend Vue/Inertia.
+ *
+ * @see https://inertiajs.com/server-side-setup
+ */
 class HandleInertiaRequests extends Middleware
 {
     /**

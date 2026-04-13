@@ -166,6 +166,144 @@ Mỗi Helper class cung cấp 3 method:
 - `AddPermissions($permissions)` → đăng ký permission
 - `AddRoute()` → đăng ký Orchid screen routes
 
+### Team Actions (Jetstream) (`app/Actions/Jetstream/`)
+
+Các action class này implement các contract của Laravel Jetstream để xử lý toàn bộ vòng đời của Team. Mỗi class được bind vào Jetstream service container và được gọi tự động khi người dùng thực hiện thao tác liên quan đến Team.
+
+#### `CreateTeam` — Tạo Team mới
+**Satisfies: Requirement 6.1**
+
+Implement `CreatesTeams` contract.
+
+```
+create(User $user, array $input): Team
+```
+
+- Authorize qua Gate: `create` trên `Jetstream::newTeamModel()`
+- Validate `name`: required, string, max:255 (bag: `createTeam`)
+- Dispatch `AddingTeam` event
+- Tạo team với `personal_team = false`, gọi `$user->switchTeam()`
+- Trả về Team vừa tạo
+
+---
+
+#### `AddTeamMember` — Thêm thành viên vào Team
+**Satisfies: Requirements 6.2, 6.3, 6.4, 6.5**
+
+Implement `AddsTeamMembers` contract.
+
+```
+add(User $user, Team $team, string $email, ?string $role = null): void
+```
+
+- Authorize qua Gate: `addTeamMember` trên `$team`
+- Validate `email`: required, email, **phải tồn tại trong bảng `users`** (lỗi: "We were unable to find a registered user with this email address.")
+- Validate `role` (nếu Jetstream có roles): required, string, phải là role hợp lệ
+- After-validation: kiểm tra `$team->hasUserWithEmail($email)` — nếu đã là thành viên → thêm lỗi "This user already belongs to the team."
+- Dispatch `AddingTeamMember` event
+- Attach user vào team qua `$team->users()->attach($newTeamMember, ['role' => $role])`
+- Dispatch `TeamMemberAdded` event
+
+---
+
+#### `InviteTeamMember` — Mời thành viên qua email
+**Satisfies: Requirements 6.2, 6.3, 6.4**
+
+Implement `InvitesTeamMembers` contract.
+
+```
+invite(User $user, Team $team, string $email, ?string $role = null): void
+```
+
+- Authorize qua Gate: `addTeamMember` trên `$team`
+- Validate `email`: required, email, **unique trong `team_invitations` theo `team_id`** (lỗi: "This user has already been invited to the team.")
+- After-validation: kiểm tra `$team->hasUserWithEmail($email)` — nếu đã là thành viên → lỗi "This user already belongs to the team."
+- Dispatch `InvitingTeamMember` event
+- Tạo bản ghi `TeamInvitation` với email và role
+- Gửi email mời qua `Mail::to($email)->send(new TeamInvitation($invitation))`
+
+---
+
+#### `RemoveTeamMember` — Xóa thành viên khỏi Team
+**Satisfies: Requirement 6.6**
+
+Implement `RemovesTeamMembers` contract.
+
+```
+remove(User $user, Team $team, User $teamMember): void
+```
+
+- Authorize: Gate check `removeTeamMember` trên `$team` **hoặc** user tự rời team (`$user->id === $teamMember->id`)
+- Nếu không thỏa mãn → throw `AuthorizationException`
+- Kiểm tra `$teamMember->id === $team->owner->id` — nếu đúng → throw `ValidationException` với lỗi "You may not leave a team that you created." (bag: `removeTeamMember`)
+- Gọi `$team->removeUser($teamMember)`
+- Dispatch `TeamMemberRemoved` event
+
+---
+
+#### `UpdateTeamName` — Cập nhật tên Team
+**Satisfies: Requirement 6.7**
+
+Implement `UpdatesTeamNames` contract.
+
+```
+update(User $user, Team $team, array $input): void
+```
+
+- Authorize qua Gate: `update` trên `$team` (chỉ owner)
+- Validate `name`: required, string, max:255 (bag: `updateTeamName`)
+- Lưu tên mới qua `$team->forceFill(['name' => $input['name']])->save()`
+
+---
+
+#### `DeleteTeam` — Xóa Team
+**Satisfies: Requirement 6.8**
+
+Implement `DeletesTeams` contract.
+
+```
+delete(Team $team): void
+```
+
+- Gọi `$team->purge()` — xóa team cùng toàn bộ dữ liệu liên quan (members, invitations)
+
+---
+
+#### `DeleteUser` — Xóa User
+**Satisfies: Requirement 4.4**
+
+Implement `DeletesUsers` contract.
+
+```
+delete(User $user): void
+```
+
+- Chạy trong DB transaction
+- Detach user khỏi tất cả teams (`$user->teams()->detach()`)
+- Xóa tất cả owned teams qua `DeletesTeams::delete()` (gọi đệ quy `DeleteTeam`)
+- Xóa profile photo (`$user->deleteProfilePhoto()`)
+- Xóa tất cả Sanctum tokens (`$user->tokens->each->delete()`)
+- Xóa user record (`$user->delete()`)
+
+---
+
+### TeamPolicy (`app/Policies/TeamPolicy.php`)
+
+Policy class kiểm soát quyền truy cập vào các thao tác Team. Sử dụng trait `HandlesAuthorization`.
+
+| Method | Điều kiện cho phép |
+|---|---|
+| `viewAny(User)` | Luôn `true` — mọi user đều có thể xem danh sách team |
+| `view(User, Team)` | `$user->belongsToTeam($team)` — phải là thành viên |
+| `create(User)` | Luôn `true` — mọi user đều có thể tạo team |
+| `update(User, Team)` | `$user->ownsTeam($team)` — chỉ owner |
+| `addTeamMember(User, Team)` | `$user->ownsTeam($team)` — chỉ owner |
+| `updateTeamMember(User, Team)` | `$user->ownsTeam($team)` — chỉ owner |
+| `removeTeamMember(User, Team)` | `$user->ownsTeam($team)` — chỉ owner |
+| `delete(User, Team)` | `$user->ownsTeam($team)` — chỉ owner |
+
+---
+
 ### Middleware
 
 | Middleware | Mục đích |
@@ -178,10 +316,48 @@ Mỗi Helper class cung cấp 3 method:
 
 | Command | Signature | Mục đích |
 |---|---|---|
-| `user:view` | `user:view {name}` | Tạo Vue list/show pages cho một resource |
-| `management:create` | `management:create {name}` | Scaffold đầy đủ module mới (model, migration, screens, helper, API) |
-| `notification:send` | `notification:send {title} {--user_ids=} {--message=} {--action=} {--type=}` | Gửi DashboardMessage notification |
-| `generate:erd` | `generate:erd` | Sinh ERD diagram + Excel export |
+| `user:view` | `user:view {name}` | Tạo Vue list/show pages (List.vue, Show.vue) cho một resource, inject web route vào `routes/web.php` |
+| `management:create` | `management:create {name}` | Scaffold đầy đủ module mới (model, migration, screens, helper, API controller, menu, permission, routes) |
+| `notification:send` | `notification:send {title} {--user_ids=} {--message=} {--action=} {--type=}` | Gửi DashboardMessage notification đến tất cả users hoặc danh sách user_ids cụ thể |
+| `generate:erd` | `generate:erd {filename?} {--format=png}` | Sinh ERD diagram (kế thừa từ `beyondcode/laravel-er-diagram-generator`) + xuất Excel với tất cả bảng DB |
+
+**Chi tiết các command:**
+
+**`user:view {name}`** (`app/Console/Commands/UserCreate.php`)
+- Nhận tên resource (PascalCase, e.g. `Post`)
+- Inject web route vào `routes/web.php`
+- Hỏi layout type (`grid` hoặc `list`)
+- Tạo `resources/js/Pages/{PluralName}/List.vue` từ stub
+- Tạo `resources/js/Pages/{PluralName}/Show.vue` từ stub
+
+**`management:create {name}`** (`app/Console/Commands/ManagementCreate.php`)
+- Nhận tên module (PascalCase, e.g. `Post`)
+- Tạo `app/Models/{Name}.php` + migration `create_table_{table}`
+- Tạo `app/Orchid/Helpers/{Name}.php`
+- (Optional) Tạo `app/Http/Controllers/Api/{Name}Controller.php` + inject route vào `routes/api.php`
+- Tạo `app/Orchid/Layouts/{Name}/{Name}ListLayout.php`
+- Tạo `app/Orchid/Screens/{Name}/{Name}ListScreen.php`
+- Tạo `app/Orchid/Screens/{Name}/{Name}EditScreen.php`
+- (Optional) Inject menu + permission vào `app/Orchid/PlatformProvider.php`
+- (Optional) Inject route vào `routes/platform.php`
+- (Optional) Gán permission `platform.systems.{table}` cho user được chọn
+- Tất cả bước tạo file đều idempotent (bỏ qua nếu file đã tồn tại)
+
+**`notification:send {title} {--user_ids=} {--message=} {--action=} {--type=}`** (`app/Console/Commands/SendNotification.php`)
+- `{title}`: tiêu đề notification (bắt buộc)
+- `{--user_ids=}`: danh sách user id cách nhau bởi dấu phẩy; nếu bỏ qua → gửi cho tất cả users
+- `{--message=}`: nội dung message (mặc định = title)
+- `{--action=}`: URL action
+- `{--type=}`: loại color (INFO, SUCCESS, WARNING, DANGER, v.v. — map sang Orchid `Color` enum)
+- Ví dụ: `php artisan notification:send "Welcome" --user_ids=1,2 --message="Hello" --action="/" --type="info"`
+
+**`generate:erd {filename?} {--format=png}`** (`app/Console/Commands/GenerateERD.php`)
+- Kế thừa `BeyondCode\ErdGenerator\GenerateDiagramCommand`, gọi `parent::handle()` để sinh diagram
+- Sau đó xuất file Excel (`.xlsx`) cùng tên với diagram
+- Excel gồm sheet "ERD" (chứa ảnh `erd.jpeg`) + một sheet riêng cho mỗi bảng trong DB
+- Mỗi sheet bảng (`ERDSheetTable`) hiển thị: tên bảng, comment, và các cột với Column/Datatype/Key/Not Null/Default/Memo
+- Thứ tự sheet: bảng `users` trước, bảng hệ thống (jobs, cache, migrations, v.v.) sau cùng, còn lại theo alphabet
+- Export classes: `ERD` (WithMultipleSheets), `ERDSheet` (sheet ảnh ERD), `ERDSheetTable` (sheet chi tiết bảng)
 
 ---
 

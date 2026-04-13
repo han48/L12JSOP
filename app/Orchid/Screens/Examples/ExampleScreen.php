@@ -17,6 +17,7 @@ use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/** Main Orchid example/demo screen showcasing platform features (DEV_MODE only). */
 class ExampleScreen extends Screen
 {
     /**

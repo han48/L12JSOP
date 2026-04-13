@@ -11,6 +11,19 @@ use Illuminate\Support\Facades\Log;
 use Orchid\Platform\Notifications\DashboardMessage;
 use Orchid\Support\Facades\Toast;
 
+/**
+ * Màn hình gửi thông báo (SendNotification) trong Admin Panel.
+ *
+ * Override BaseEditScreen để cung cấp form gửi DashboardMessage notification đến
+ * một hoặc nhiều User. Thay vì lưu vào database trực tiếp, `save()` gọi
+ * `$user->notify(DashboardMessage::make(...))` cho từng User được chọn.
+ *
+ * Controls tùy chỉnh: title (string), message (text), action (string),
+ * notification_type (Color enum), users (multiple_users selector).
+ *
+ * @see \App\Orchid\Screens\BaseEditScreen
+ * @satisfies Requirements 12.7, 12.8
+ */
 class SendNotificationEditScreen extends BaseEditScreen
 {
     /**

@@ -7,6 +7,22 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
+/**
+ * Artisan command `user:view {name}` — scaffolds Vue.js frontend pages for a resource.
+ *
+ * Signature: `user:view {name}`
+ *   - {name}  The resource name (e.g. "Post", "Product"). Used to derive the plural table name
+ *             and inject the corresponding web route.
+ *
+ * Key steps in handle():
+ *   1. Derives the plural snake_case table name from {name}.
+ *   2. Injects a web route entry into `routes/web.php` using a keyword-based stub replacement.
+ *   3. Prompts for layout type ("grid" or "list").
+ *   4. Generates `resources/js/Pages/{PluralName}/List.vue` from the matching stub.
+ *   5. Generates `resources/js/Pages/{PluralName}/Show.vue` from the matching stub.
+ *
+ * Satisfies: Requirement 16.1
+ */
 class UserCreate extends Command
 {
     /**
@@ -24,7 +40,9 @@ class UserCreate extends Command
     protected $description = 'Create user view: list, show';
 
     /**
-     * Create directory
+     * Recursively create the parent directory for a given file path if it does not exist.
+     *
+     * @param  string  $filePath  Absolute or relative path to the target file.
      */
     public static function CreateDirectory($filePath)
     {
@@ -36,6 +54,11 @@ class UserCreate extends Command
 
     /**
      * Execute the console command.
+     *
+     * Injects a web route for the resource, then generates List.vue and Show.vue
+     * pages from layout-specific stubs (grid or list).
+     *
+     * @return void
      */
     public function handle()
     {

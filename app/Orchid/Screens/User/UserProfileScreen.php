@@ -18,6 +18,29 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/**
+ * Màn hình chỉnh sửa hồ sơ cá nhân của người dùng đang đăng nhập.
+ *
+ * Cho phép người dùng hiện tại cập nhật thông tin hồ sơ của chính mình bao gồm:
+ * tên, email, mật khẩu, và cấu hình xác thực hai yếu tố (2FA). Không yêu cầu
+ * quyền đặc biệt — mọi người dùng đã đăng nhập đều có thể truy cập.
+ *
+ * Khác với UserEditScreen (dành cho Admin quản lý User khác), màn hình này
+ * chỉ cho phép người dùng chỉnh sửa tài khoản của chính họ.
+ *
+ * Các method chính:
+ * - query(): Lấy thông tin User hiện tại từ request
+ * - commandBar(): Nút "Back to my account" (khi đang impersonate), "Sign out", và 2FA toggle
+ * - layout(): Hiển thị các block: Profile Information, Update Password, và 2FA settings
+ * - save(): Validate và lưu tên, email của người dùng hiện tại
+ * - changePassword(): Validate mật khẩu cũ, xác nhận mật khẩu mới và lưu hash
+ *
+ * @see \App\Orchid\Layouts\User\UserEditLayout
+ * @see \App\Orchid\Layouts\User\ProfilePasswordLayout
+ * @see \App\Traits\TwoFactorScreenAuthenticatable
+ *
+ * Satisfies: Requirements 3.1, 3.4, 3.5, 4.2
+ */
 class UserProfileScreen extends Screen
 {
 

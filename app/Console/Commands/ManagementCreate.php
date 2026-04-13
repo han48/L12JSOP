@@ -7,6 +7,30 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
+/**
+ * Artisan command `management:create {name}` — scaffolds a complete management module.
+ *
+ * Signature: `management:create {name}`
+ *   - {name}  The module name in PascalCase (e.g. "Post", "Product"). Used to derive
+ *             the plural snake_case table name and all generated class names.
+ *
+ * Key steps in handle():
+ *   1. Creates `app/Models/{Name}.php` from `stubs/orchid/platform/model.stub` and runs
+ *      `make:migration create_table_{table}` to generate the corresponding migration.
+ *   2. Creates `app/Orchid/Helpers/{Name}.php` from `stubs/orchid/platform/helper.stub`.
+ *   3. (Optional) Creates `app/Http/Controllers/Api/{Name}Controller.php` from
+ *      `stubs/orchid/platform/api.stub` and injects the route into `routes/api.php`.
+ *   4. Creates `app/Orchid/Layouts/{Name}/{Name}ListLayout.php` from the list-layout stub.
+ *   5. Creates `app/Orchid/Screens/{Name}/{Name}ListScreen.php` from the list-screen stub.
+ *   6. Creates `app/Orchid/Screens/{Name}/{Name}EditScreen.php` from the edit-screen stub.
+ *   7. (Optional) Injects menu and permission calls into `app/Orchid/PlatformProvider.php`.
+ *   8. (Optional) Injects the Orchid route into `routes/platform.php`.
+ *   9. (Optional) Grants the new `platform.systems.{table}` permission to selected users.
+ *
+ * All file creation steps are idempotent — existing files are skipped with an info message.
+ *
+ * Satisfies: Requirement 16.2
+ */
 class ManagementCreate extends Command
 {
     /**

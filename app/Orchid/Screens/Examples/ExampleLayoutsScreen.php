@@ -7,6 +7,7 @@ use Orchid\Screen\Action;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating Orchid layout types (DEV_MODE only). */
 class ExampleLayoutsScreen extends Screen
 {
     /**

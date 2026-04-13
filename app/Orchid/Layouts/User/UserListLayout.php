@@ -15,6 +15,27 @@ use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
+/**
+ * List layout for the User management screen in the Orchid admin panel.
+ *
+ * Renders a table of users with columns for name (displayed as a Persona card
+ * using UserPresenter), email (opens an inline edit modal), created_at,
+ * updated_at, and an actions dropdown with Edit and Delete buttons.
+ *
+ * The email column uses a ModalToggle to allow quick inline editing without
+ * navigating away from the list screen.
+ *
+ * Targets the "users" data key provided by UserListScreen.
+ *
+ * Displayed on: Admin Panel → Access Controls → Users (UserListScreen).
+ * Required permission: platform.systems.users
+ *
+ * @see \App\Orchid\Screens\User\UserListScreen
+ * @see \App\Orchid\Presenters\UserPresenter
+ * @see \Orchid\Screen\Layouts\Table
+ *
+ * Satisfies: Requirements 4.1, 14.1
+ */
 class UserListLayout extends Table
 {
     /**

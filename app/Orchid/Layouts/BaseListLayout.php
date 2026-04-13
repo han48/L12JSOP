@@ -13,6 +13,31 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use ReflectionClass;
 
+/**
+ * Base layout class for all list/table views in the Orchid admin panel.
+ *
+ * Provides a generic, auto-configured table layout that introspects the
+ * corresponding Eloquent model to determine which columns to display.
+ * Domain-specific list layouts (e.g. PostListLayout, ProductListLayout)
+ * extend this class and inherit its behaviour without needing any extra code.
+ *
+ * Key features:
+ * - Auto-resolves the model class from the layout class name (e.g. PostListLayout → App\Models\Post).
+ * - Auto-discovers table columns via Schema::getColumnListing(), excluding common
+ *   verbose/binary columns defined in $hidden.
+ * - Supports i18n column labels via Laravel's Lang facade.
+ * - Renders special columns (image, status, categories, tags, user_id, author_id)
+ *   through display_* accessors on the model.
+ * - Provides default Edit / Delete / Clone action buttons per row via a DropDown.
+ * - Subclasses can override $display to pin a specific column set, or set
+ *   $disableAction = true to suppress the actions column.
+ *
+ * @see \App\Orchid\Layouts\Post\PostListLayout
+ * @see \App\Orchid\Layouts\Product\ProductListLayout
+ * @see \App\Orchid\Screens\BaseListScreen
+ *
+ * Satisfies: Requirements 4.1, 14.1
+ */
 class BaseListLayout extends Table
 {
 

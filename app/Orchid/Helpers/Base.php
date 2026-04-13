@@ -20,15 +20,39 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TimeZone;
 
+/**
+ * Base Orchid Helper — lớp cha cho tất cả Orchid admin panel helpers.
+ *
+ * Mỗi concrete helper (Post, Product, Transaction, v.v.) kế thừa từ lớp này để
+ * tự động có khả năng đăng ký routes, menu entry, và permissions theo convention
+ * `platform.systems.{plural_snake_name}`.
+ *
+ * 3 methods chính:
+ * - `AddRoute()` — đăng ký 3 routes: list, create, edit
+ * - `AddMenus($menu)` — thêm menu item vào admin navigation
+ * - `AddPermissions($permissions)` — đăng ký permission slug
+ *
+ * @see \App\Orchid\PlatformProvider
+ * @satisfies Requirements 14.1
+ */
 class Base
 {
     /**
-     * Icon
+     * Bootstrap Icons class used for the admin menu item.
+     *
+     * Override in subclasses to customise the icon, e.g. `'bs.bag'`.
+     *
+     * @var string
      */
     protected $icon = 'bs.gear';
 
     /**
-     * Get base object name
+     * Get the short class name of the concrete helper.
+     *
+     * Uses reflection to return the unqualified class name (e.g. `"Post"`, `"Product"`).
+     * This value is used as the basis for route names, permission slugs, and menu labels.
+     *
+     * @return string Short class name of the concrete helper.
      */
     public function GetBaseName()
     {
@@ -36,9 +60,11 @@ class Base
     }
 
     /**
-     * Get model class
+     * Get the fully-qualified model class name for this resource.
      *
-     * @return string
+     * Resolves to `App\Models\{BaseName}`, e.g. `App\Models\Post`.
+     *
+     * @return string Fully-qualified model class name.
      */
     public function getModelClass()
     {
@@ -46,9 +72,11 @@ class Base
     }
 
     /**
-     * Get model object
+     * Get a new instance of the model for this resource.
      *
-     * @return object
+     * Returns `null` if the model class does not exist.
+     *
+     * @return object|null New model instance, or null if the class is not found.
      */
     public function getModelObject()
     {
@@ -59,8 +87,18 @@ class Base
     }
 
     /**
-     * Add base route
-     * LIST - CREATE - EDIT
+     * Register the Orchid screen routes for this resource.
+     *
+     * Registers three routes under the `platform.systems.{plural}` namespace:
+     * - `GET /{plural}/{id}/edit`  → `{Name}EditScreen`  (edit existing record)
+     * - `GET /{name}/create`       → `{Name}EditScreen`  (create new record)
+     * - `GET /{plural}`            → `{Name}ListScreen`  (paginated list)
+     *
+     * Each route includes breadcrumb definitions that chain from `platform.index`.
+     *
+     * Called by {@see \App\Orchid\PlatformProvider} when building the admin routes.
+     *
+     * @return void
      */
     public function AddRoute()
     {
@@ -91,7 +129,18 @@ class Base
     }
 
     /**
-     * Add menu
+     * Append a menu item for this resource to the admin navigation array.
+     *
+     * Adds a {@see \Orchid\Screen\Actions\Menu} entry that:
+     * - Uses the plural display name as the label (e.g. "Posts", "Products")
+     * - Uses the configured {@see $icon}
+     * - Links to the `platform.systems.{plural}` route
+     * - Is gated by the `platform.systems.{plural}` permission
+     *
+     * Called by {@see \App\Orchid\PlatformProvider::menu()} to build the sidebar.
+     *
+     * @param  array  $menu  Existing menu items array.
+     * @return array         Updated menu items array with this resource's entry appended.
      */
     public function AddMenus($menu)
     {
@@ -109,7 +158,16 @@ class Base
     }
 
     /**
-     * Add permission
+     * Register the permission for this resource with the Orchid permission builder.
+     *
+     * Adds a permission entry with slug `platform.systems.{plural}` and a human-readable
+     * display name (e.g. `"Posts"`, `"Products"`).
+     *
+     * Called by {@see \App\Orchid\PlatformProvider::permissions()} to populate the
+     * permissions list shown in the Role management screen.
+     *
+     * @param  \Orchid\Platform\ItemPermission  $permissions  Orchid permission builder instance.
+     * @return \Orchid\Platform\ItemPermission                Updated permission builder.
      */
     public function AddPermissions($permissions)
     {
@@ -121,7 +179,17 @@ class Base
     }
 
     /**
-     * Get input type
+     * Resolve the appropriate input type string for a given database column.
+     *
+     * Checks the column name first for well-known names (image, status, html, memo,
+     * attachments, tags, categories, author_id, user_id, admin_id), then falls back
+     * to the database column type obtained via {@see \Illuminate\Support\Facades\Schema}.
+     *
+     * @param  string      $table   Database table name.
+     * @param  string      $column  Column name to inspect.
+     * @param  string|null $type    Optional override for the column type; if provided,
+     *                              the Schema lookup is skipped.
+     * @return string               Input type string (e.g. `'image'`, `'number'`, `'datetime'`).
      */
     public static function GetInputType($table, $column, $type = null)
     {
@@ -201,7 +269,20 @@ class Base
     }
 
     /**
-     * Get input control
+     * Build and return an Orchid field component for a given input definition.
+     *
+     * Selects the appropriate Orchid field class based on the `type` key in `$value`
+     * (e.g. `Input`, `Select`, `DateTimer`, `Quill`, `Picture`, `Attach`, etc.) and
+     * applies any additional configuration options present in the `$value` array
+     * (label, help, popover, required, mask, rows, placeholder, options, etc.).
+     *
+     * If `$value` already contains a `placeholder` key at the top level, the pre-built
+     * `input` value is returned directly without further processing.
+     *
+     * @param  array   $value      Field definition array with at minimum a `type` key.
+     * @param  string  $base_name  Resource name used to prefix the field name (e.g. `"Post"`).
+     * @param  string  $key        Column/field key (e.g. `"title"`, `"image"`).
+     * @return \Orchid\Screen\Field Configured Orchid field instance.
      */
     public static function GetInput($value, $base_name, $key)
     {

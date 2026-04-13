@@ -15,6 +15,28 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/**
+ * Màn hình tạo mới và chỉnh sửa Role trong Admin Panel.
+ *
+ * Cho phép Admin tạo mới hoặc chỉnh sửa Role bao gồm: tên (name), slug (unique),
+ * và tập hợp các permissions được gán cho Role đó. Permissions được lưu dưới
+ * dạng JSON trong bảng orchid_roles.
+ *
+ * Yêu cầu quyền: platform.systems.roles
+ *
+ * Các method chính:
+ * - query(): Tải dữ liệu Role cùng với trạng thái permissions hiện tại
+ * - name(): Trả về "Edit Role"
+ * - commandBar(): Các nút Save và Remove (chỉ hiển thị khi Role đã tồn tại)
+ * - layout(): Hiển thị các block: Role (tên/slug) và Permission/Privilege
+ * - save(): Validate name và slug unique, lưu Role cùng permissions đã chọn
+ * - remove(): Xóa Role và redirect về danh sách
+ *
+ * @see \App\Orchid\Layouts\Role\RoleEditLayout
+ * @see \App\Orchid\Layouts\Role\RolePermissionLayout
+ *
+ * Satisfies: Requirements 5.2, 5.3, 5.4
+ */
 class RoleEditScreen extends Screen
 {
     /**

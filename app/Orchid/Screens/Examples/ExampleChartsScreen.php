@@ -9,6 +9,7 @@ use App\Orchid\Layouts\Examples\ChartPieExample;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating Orchid chart components (DEV_MODE only). */
 class ExampleChartsScreen extends Screen
 {
     /**

@@ -7,8 +7,40 @@ use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Link;
 
+/**
+ * Screen danh sách dùng chung cho Admin Panel.
+ *
+ * BaseListScreen kế thừa từ {@see BaseScreen} và cung cấp đầy đủ chức năng hiển thị
+ * danh sách bản ghi có phân trang cho bất kỳ domain nào. Tên model, route, và layout
+ * đều được tự động suy ra từ tên class con thông qua {@see BaseScreen::GetBaseName()}.
+ *
+ * Các domain screen chỉ cần kế thừa và không cần override gì thêm trong trường hợp
+ * cơ bản:
+ *
+ * ```php
+ * class PostListScreen extends BaseListScreen {}
+ * class ProductListScreen extends BaseListScreen {}
+ * ```
+ *
+ * Screen tự động:
+ * - Load dữ liệu từ model tương ứng (ví dụ: `App\Models\Post`)
+ * - Render layout từ `App\Orchid\Layouts\{Name}\{Name}ListLayout`
+ * - Hiển thị nút "Create new" trỏ đến route `platform.systems.{name}.create`
+ * - Hỗ trợ xóa và nhân bản (clone) bản ghi qua các method action
+ *
+ * @see BaseScreen
+ * @see BaseEditScreen
+ */
 class BaseListScreen extends BaseScreen
 {
+    /**
+     * Danh sách các trường bị loại trừ khi nhân bản (clone) một bản ghi.
+     *
+     * Các trường này thường là unique hoặc mang tính định danh, không nên sao chép
+     * nguyên xi sang bản ghi mới (ví dụ: slug, code, username).
+     *
+     * @var string[]
+     */
     protected $cloneExcepts = [
         'slug',
         'status',
@@ -18,9 +50,13 @@ class BaseListScreen extends BaseScreen
     ];
 
     /**
-     * Query data.
+     * Tải dữ liệu để hiển thị trên screen.
      *
-     * @return array
+     * Tự động resolve model class từ tên domain (ví dụ: `App\Models\Post`) và
+     * trả về danh sách bản ghi có phân trang. Kết quả được đặt vào key là tên
+     * biến số nhiều dạng snake_case (ví dụ: `posts`, `order_items`).
+     *
+     * @return array<string, \Illuminate\Pagination\LengthAwarePaginator> Dữ liệu phân trang
      */
     public function query(): array
     {
@@ -33,9 +69,12 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * The name of the screen displayed in the header.
+     * Tiêu đề hiển thị trên header của screen.
      *
-     * @return string|null
+     * Tự động sinh từ tên domain, ví dụ: "Post Management", "Product Management".
+     * Hỗ trợ i18n thông qua helper `__()`.
+     *
+     * @return string|null Tiêu đề screen đã được dịch
      */
     public function name(): ?string
     {
@@ -48,7 +87,11 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * The description is displayed on the item's screen under the heading
+     * Mô tả ngắn hiển thị bên dưới tiêu đề screen.
+     *
+     * Ví dụ: "List all posts", "List all products". Hỗ trợ i18n.
+     *
+     * @return string|null Mô tả screen đã được dịch
      */
     public function description(): ?string
     {
@@ -61,9 +104,12 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * The screen's action buttons.
+     * Các action button hiển thị trên thanh lệnh của screen.
      *
-     * @return \Orchid\Screen\Action[]
+     * Mặc định hiển thị nút "Create new" trỏ đến route tạo mới của domain,
+     * ví dụ: `platform.systems.posts.create`.
+     *
+     * @return \Orchid\Screen\Action[] Mảng các action button
      */
     public function commandBar(): iterable
     {
@@ -78,9 +124,12 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * The screen's layout elements.
+     * Các layout element hiển thị trên screen.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * Tự động resolve class layout từ namespace `App\Orchid\Layouts\{Name}\{Name}ListLayout`.
+     * Layout class này chịu trách nhiệm định nghĩa các cột hiển thị trong bảng danh sách.
+     *
+     * @return \Orchid\Screen\Layout[]|string[] Mảng chứa tên class layout
      */
     public function layout(): iterable
     {
@@ -92,7 +141,13 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * Delte item from database
+     * Xóa một bản ghi khỏi cơ sở dữ liệu.
+     *
+     * Tìm bản ghi theo `id` từ request, gọi `delete()` (soft delete nếu model hỗ trợ),
+     * và hiển thị thông báo thành công. Được gọi từ action button trong layout.
+     *
+     * @param  Request  $request  Request chứa tham số `id` của bản ghi cần xóa
+     * @return void
      */
     public function remove(Request $request): void
     {
@@ -105,7 +160,14 @@ class BaseListScreen extends BaseScreen
     }
 
     /**
-     * Clone item to database
+     * Nhân bản (clone) một bản ghi trong cơ sở dữ liệu.
+     *
+     * Tìm bản ghi theo `id` từ request, tạo bản sao bằng `replicate()` với các trường
+     * trong {@see $cloneExcepts} bị loại trừ, sau đó lưu bản sao mới. Hiển thị thông
+     * báo thành công sau khi clone.
+     *
+     * @param  Request  $request  Request chứa tham số `id` của bản ghi cần nhân bản
+     * @return void
      */
     public function clone(Request $request): void
     {

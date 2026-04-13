@@ -6,6 +6,7 @@ namespace App\Orchid\Layouts\Examples;
 
 use Orchid\Screen\Layouts\Chart;
 
+/** Example pie chart layout used in the Orchid dev/example screens (DEV_MODE only). */
 class ChartPieExample extends Chart
 {
     /**

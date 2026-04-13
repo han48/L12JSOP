@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\Examples;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Screen\Layouts\TabMenu;
 
+/** Tab navigation menu for the Orchid example form elements screens (DEV_MODE only). */
 class ExampleElements extends TabMenu
 {
     /**

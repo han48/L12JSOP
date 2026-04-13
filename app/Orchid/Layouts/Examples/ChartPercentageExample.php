@@ -6,6 +6,7 @@ namespace App\Orchid\Layouts\Examples;
 
 use Orchid\Screen\Layouts\Chart;
 
+/** Example percentage chart layout used in the Orchid dev/example screens (DEV_MODE only). */
 class ChartPercentageExample extends Chart
 {
     /**

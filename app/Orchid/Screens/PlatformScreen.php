@@ -7,6 +7,15 @@ namespace App\Orchid\Screens;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/**
+ * Welcome / landing screen for the Orchid admin panel.
+ *
+ * Displayed at the root admin URL (platform.index route). Renders the
+ * Orchid "Get Started" welcome view and the asset update partial.
+ * No data is loaded and no action buttons are shown.
+ *
+ * @see \Orchid\Screen\Screen
+ */
 class PlatformScreen extends Screen
 {
     /**

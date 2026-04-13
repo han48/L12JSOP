@@ -12,6 +12,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/** Example screen demonstrating Orchid card components (DEV_MODE only). */
 class ExampleCardsScreen extends Screen
 {
     /**

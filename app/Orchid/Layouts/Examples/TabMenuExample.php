@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\Examples;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Screen\Layouts\TabMenu;
 
+/** Tab navigation menu used in the Orchid example layouts screen (DEV_MODE only). */
 class TabMenuExample extends TabMenu
 {
     /**

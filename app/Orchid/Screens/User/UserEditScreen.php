@@ -21,6 +21,31 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/**
+ * Màn hình tạo mới và chỉnh sửa người dùng trong Admin Panel.
+ *
+ * Cho phép Admin tạo mới hoặc chỉnh sửa thông tin User bao gồm: tên, email,
+ * mật khẩu, Roles được gán, và các quyền riêng lẻ (individual permissions).
+ * Hỗ trợ tính năng impersonate để đăng nhập dưới danh nghĩa User đó.
+ *
+ * Yêu cầu quyền: platform.systems.users
+ *
+ * Các method chính:
+ * - query(): Tải dữ liệu User cùng với roles và trạng thái permissions
+ * - name(): Trả về "Edit User" hoặc "Create User" tùy theo trạng thái tồn tại
+ * - commandBar(): Các nút Impersonate, Remove, Save
+ * - layout(): Hiển thị các block: Profile Information, Password, Roles, Permissions
+ * - save(): Validate email unique, lưu thông tin User và cập nhật roles
+ * - remove(): Xóa vĩnh viễn User và redirect về danh sách
+ * - loginAs(): Kích hoạt impersonation, đăng nhập dưới danh nghĩa User được chọn
+ *
+ * @see \App\Orchid\Layouts\User\UserEditLayout
+ * @see \App\Orchid\Layouts\User\UserPasswordLayout
+ * @see \App\Orchid\Layouts\User\UserRoleLayout
+ * @see \App\Orchid\Layouts\Role\RolePermissionLayout
+ *
+ * Satisfies: Requirements 4.2, 4.3, 4.4, 4.5, 4.6
+ */
 class UserEditScreen extends Screen
 {
     /**

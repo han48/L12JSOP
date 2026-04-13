@@ -10,6 +10,23 @@ use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
+/**
+ * Màn hình quản lý danh sách Role trong Admin Panel.
+ *
+ * Hiển thị danh sách phân trang tất cả các Role trong hệ thống, sắp xếp theo
+ * id giảm dần. Cho phép Admin điều hướng đến trang tạo mới Role.
+ *
+ * Yêu cầu quyền: platform.systems.roles
+ *
+ * Các method chính:
+ * - query(): Lấy danh sách Role phân trang với filters và sắp xếp theo id giảm dần
+ * - commandBar(): Nút "Add" để điều hướng đến trang tạo mới Role
+ * - layout(): Hiển thị RoleListLayout
+ *
+ * @see \App\Orchid\Layouts\Role\RoleListLayout
+ *
+ * Satisfies: Requirements 5.1, 5.4
+ */
 class RoleListScreen extends Screen
 {
     /**

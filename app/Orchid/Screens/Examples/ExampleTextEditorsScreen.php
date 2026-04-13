@@ -11,6 +11,7 @@ use Orchid\Screen\Fields\SimpleMDE;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating Orchid text editor fields (DEV_MODE only). */
 class ExampleTextEditorsScreen extends Screen
 {
     /**

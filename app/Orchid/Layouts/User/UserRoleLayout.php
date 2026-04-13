@@ -9,6 +9,18 @@ use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Rows;
 
+/**
+ * Form layout for assigning Orchid Roles to a User in the admin panel.
+ *
+ * Renders a multi-select dropdown populated from the orchid_roles table,
+ * allowing an admin to assign one or more roles to the user being edited.
+ * Used inside a Layout::block() on UserEditScreen.
+ *
+ * @see \App\Orchid\Screens\User\UserEditScreen
+ * @see \Orchid\Screen\Layouts\Rows
+ *
+ * Satisfies: Requirements 4.2
+ */
 class UserRoleLayout extends Rows
 {
     /**

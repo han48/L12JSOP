@@ -8,12 +8,34 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
+/**
+ * Xử lý cập nhật thông tin hồ sơ người dùng.
+ *
+ * Triển khai contract UpdatesUserProfileInformation của Laravel Fortify.
+ * Cho phép user cập nhật tên, email, và ảnh đại diện. Nếu email thay đổi
+ * và user implement MustVerifyEmail, email_verified_at sẽ bị reset và
+ * một email xác minh mới sẽ được gửi đi.
+ *
+ * @see \Laravel\Fortify\Contracts\UpdatesUserProfileInformation
+ */
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
     /**
-     * Validate and update the given user's profile information.
+     * Validate và cập nhật thông tin hồ sơ của user.
      *
-     * @param  array<string, mixed>  $input
+     * Các trường được validate:
+     * - name: bắt buộc, tối đa 255 ký tự
+     * - email: bắt buộc, định dạng email hợp lệ, unique (bỏ qua user hiện tại), tối đa 255 ký tự
+     * - photo: tùy chọn, chỉ chấp nhận jpg/jpeg/png, tối đa 1024KB
+     *
+     * Nếu có ảnh mới, ảnh cũ sẽ được thay thế qua `updateProfilePhoto()`.
+     * Nếu email thay đổi và user cần xác minh email, sẽ gọi `updateVerifiedUser()`.
+     *
+     * @param  \App\Models\User  $user   User cần cập nhật
+     * @param  array<string, mixed>  $input  Dữ liệu mới gồm name, email, và tùy chọn photo
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException  Nếu dữ liệu không hợp lệ (bag: updateProfileInformation)
      */
     public function update(User $user, array $input): void
     {
@@ -41,9 +63,14 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     }
 
     /**
-     * Update the given verified user's profile information.
+     * Cập nhật thông tin hồ sơ cho user đã xác minh email khi email thay đổi.
      *
-     * @param  array<string, string>  $input
+     * Reset `email_verified_at` về null và gửi lại email xác minh đến địa chỉ mới.
+     * Được gọi khi user thay đổi email và class User implement MustVerifyEmail.
+     *
+     * @param  \App\Models\User  $user   User cần cập nhật
+     * @param  array<string, string>  $input  Dữ liệu mới gồm name và email
+     * @return void
      */
     protected function updateVerifiedUser(User $user, array $input): void
     {

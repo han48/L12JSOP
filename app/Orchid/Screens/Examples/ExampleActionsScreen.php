@@ -12,6 +12,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/** Example screen demonstrating Orchid action buttons and modals (DEV_MODE only). */
 class ExampleActionsScreen extends Screen
 {
     /**

@@ -15,6 +15,29 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+/**
+ * Màn hình quản lý danh sách người dùng trong Admin Panel.
+ *
+ * Hiển thị danh sách phân trang tất cả người dùng đã đăng ký trong hệ thống,
+ * hỗ trợ lọc theo tên, email và khoảng thời gian. Cho phép tạo mới, chỉnh sửa
+ * nhanh qua modal, và xóa người dùng.
+ *
+ * Yêu cầu quyền: platform.systems.users
+ *
+ * Các method chính:
+ * - query(): Lấy danh sách User phân trang với filters và sắp xếp theo id giảm dần
+ * - commandBar(): Nút "Add" để điều hướng đến trang tạo mới
+ * - layout(): Hiển thị UserFiltersLayout, UserListLayout và modal chỉnh sửa nhanh
+ * - loadUserOnOpenModal(): Tải dữ liệu User khi mở modal chỉnh sửa
+ * - saveUser(): Lưu thay đổi User từ modal, validate email unique
+ * - remove(): Xóa vĩnh viễn User theo id
+ *
+ * @see \App\Orchid\Layouts\User\UserFiltersLayout
+ * @see \App\Orchid\Layouts\User\UserListLayout
+ * @see \App\Orchid\Layouts\User\UserEditLayout
+ *
+ * Satisfies: Requirements 4.1, 4.3, 4.4, 4.6
+ */
 class UserListScreen extends Screen
 {
     /**

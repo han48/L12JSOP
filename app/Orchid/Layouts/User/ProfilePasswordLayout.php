@@ -8,6 +8,18 @@ use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Layouts\Rows;
 
+/**
+ * Password change layout for the User profile screen in the Orchid admin panel.
+ *
+ * Renders three password fields: current password (validated against the active guard),
+ * new password, and new password confirmation. Used on UserProfileScreen to allow
+ * the currently logged-in user to change their own password.
+ *
+ * @see \App\Orchid\Screens\User\UserProfileScreen
+ * @see \Orchid\Screen\Layouts\Rows
+ *
+ * Satisfies: Requirements 3.4
+ */
 class ProfilePasswordLayout extends Rows
 {
     /**

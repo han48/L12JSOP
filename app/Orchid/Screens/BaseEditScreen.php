@@ -12,15 +12,50 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use stdClass;
 
+/**
+ * Screen tạo mới và chỉnh sửa bản ghi dùng chung cho Admin Panel.
+ *
+ * BaseEditScreen kế thừa từ {@see BaseScreen} và tự động sinh form chỉnh sửa
+ * dựa trên cấu trúc bảng database của model tương ứng. Tên model, route, và
+ * các trường form đều được suy ra tự động từ tên class con.
+ *
+ * Các domain screen chỉ cần kế thừa mà không cần override gì thêm:
+ *
+ * ```php
+ * class PostEditScreen extends BaseEditScreen {}
+ * class ProductEditScreen extends BaseEditScreen {}
+ * ```
+ *
+ * Screen tự động:
+ * - Resolve model class từ tên domain (ví dụ: `App\Models\Post`)
+ * - Đọc danh sách cột từ database schema và sinh form input tương ứng
+ * - Bỏ qua các cột hệ thống (id, created_at, updated_at, deleted_at, read_at)
+ * - Hiển thị tiêu đề động: "Post edit screen" hoặc "Post create screen"
+ * - Cung cấp action Save (lưu) và Remove (xóa, chỉ hiện khi đang edit)
+ * - Redirect về trang danh sách sau khi lưu hoặc xóa
+ *
+ * @see BaseScreen
+ * @see BaseListScreen
+ * @see \App\Orchid\Helpers\Base
+ */
 class BaseEditScreen extends BaseScreen
 {
     /**
-     * Array of editable column
+     * Danh sách các control (trường form) tùy chỉnh.
+     *
+     * Nếu `null`, screen sẽ tự động sinh controls từ cấu trúc bảng database.
+     * Subclass có thể gán mảng controls tùy chỉnh để override hành vi mặc định.
+     *
+     * @var array<string, array{label: string, type: string}>|null
      */
     protected $controls = null;
 
     /**
-     * Array of hidden column
+     * Danh sách các cột bị bỏ qua khi sinh form tự động.
+     *
+     * Các cột này thường là metadata hệ thống không cần chỉnh sửa trực tiếp.
+     *
+     * @var string[]
      */
     protected $ignores = [
         'id',
@@ -31,9 +66,11 @@ class BaseEditScreen extends BaseScreen
     ];
 
     /**
-     * Get model class
+     * Lấy fully-qualified class name của model tương ứng với domain hiện tại.
      *
-     * @return string
+     * Ví dụ: với `PostEditScreen`, trả về `"App\Models\Post"`.
+     *
+     * @return string Tên class model đầy đủ
      */
     public function getModelClass()
     {
@@ -41,9 +78,12 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * Get model object
+     * Tạo và trả về instance của model tương ứng với domain hiện tại.
      *
-     * @return object
+     * Kiểm tra sự tồn tại của class trước khi khởi tạo. Trả về `null` nếu
+     * class không tồn tại.
+     *
+     * @return object|null Instance của model, hoặc null nếu class không tồn tại
      */
     public function getModelObject()
     {
@@ -54,7 +94,12 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * Get column from table
+     * Lấy danh sách tên cột của một bảng database.
+     *
+     * Sử dụng `Schema::getColumnListing()` để truy vấn cấu trúc bảng.
+     *
+     * @param  string  $table  Tên bảng database
+     * @return string[] Mảng tên cột
      */
     public function GetColumns($table)
     {
@@ -63,7 +108,28 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * Get array of editable column
+     * Lấy mảng cấu hình các control (trường form) cho screen chỉnh sửa.
+     *
+     * Nếu `$this->controls` đã được gán (không null), trả về giá trị đó trực tiếp.
+     * Ngược lại, tự động sinh controls bằng cách:
+     * 1. Đọc danh sách cột từ bảng database của model
+     * 2. Loại trừ các cột trong `$this->ignores`
+     * 3. Truy vấn metadata cột qua `SHOW COLUMNS` (MySQL)
+     * 4. Xác định loại input phù hợp qua {@see \App\Orchid\Helpers\Base::GetInputType()}
+     * 5. Gán translation label nếu có key tương ứng trong file ngôn ngữ
+     *
+     * Mỗi control có cấu trúc:
+     * ```php
+     * [
+     *   'label'     => string,   // translation key hoặc tên cột
+     *   'type'      => string,   // loại input (string, text, integer, boolean, v.v.)
+     *   'default'   => mixed,    // giá trị mặc định (nếu có)
+     *   'maxlength' => int,      // độ dài tối đa (chỉ với type string)
+     *   'required'  => bool,     // bắt buộc nhập (nếu cột NOT NULL)
+     * ]
+     * ```
+     *
+     * @return array<string, array{label: string, type: string}> Mảng controls theo tên cột
      */
     public function GetControls()
     {
@@ -123,14 +189,26 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * Object
+     * Bản ghi đang được chỉnh sửa hoặc tạo mới.
+     *
+     * Được gán trong {@see query()} sau khi load từ database (edit) hoặc
+     * khởi tạo model mới (create). Được dùng bởi `commandBar()` để kiểm tra
+     * trạng thái tồn tại (`$object->exists`).
+     *
+     * @var \Illuminate\Database\Eloquent\Model|null
      */
     public $object;
 
     /**
-     * The name of the screen displayed in the header.
+     * Tiêu đề hiển thị trên header của screen.
      *
-     * @return string|null
+     * Tự động sinh dựa trên trạng thái của `$object`:
+     * - Nếu bản ghi đã tồn tại: "Post edit screen"
+     * - Nếu là bản ghi mới: "Post create screen"
+     *
+     * Hỗ trợ i18n thông qua helper `__()`.
+     *
+     * @return string|null Tiêu đề screen đã được dịch
      */
     public function name(): ?string
     {
@@ -149,7 +227,15 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * The description is displayed on the item's screen under the heading
+     * Mô tả ngắn hiển thị bên dưới tiêu đề screen.
+     *
+     * Tự động sinh dựa trên trạng thái của `$object`:
+     * - Nếu bản ghi đã tồn tại: "Edit existing post"
+     * - Nếu là bản ghi mới: "Create a new post"
+     *
+     * Hỗ trợ i18n thông qua helper `__()`.
+     *
+     * @return string|null Mô tả screen đã được dịch
      */
     public function description(): ?string
     {
@@ -168,9 +254,18 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * Fetch data to be displayed on the screen.
+     * Tải dữ liệu để hiển thị trên screen.
      *
-     * @return array
+     * Nếu `$id` được cung cấp, tìm bản ghi tương ứng trong database (chế độ edit).
+     * Nếu không, khởi tạo model mới (chế độ create). Gán kết quả vào `$this->object`
+     * và trả về mảng dữ liệu với key là tên domain dạng lowercase.
+     *
+     * Ví dụ với `PostEditScreen`:
+     * - `GET /admin/posts/1/edit` → load Post với id=1
+     * - `GET /admin/posts/create` → tạo Post mới rỗng
+     *
+     * @param  int|null  $id  ID của bản ghi cần chỉnh sửa, hoặc null khi tạo mới
+     * @return iterable<string, \Illuminate\Database\Eloquent\Model> Dữ liệu screen
      */
     public function query($id = null): iterable
     {
@@ -189,9 +284,13 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * The screen's layout elements.
+     * Các layout element hiển thị trên screen.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * Tự động sinh danh sách input từ {@see GetControls()} và render chúng
+     * trong một `Layout::rows()`. Mỗi control được chuyển thành Orchid input
+     * field phù hợp thông qua {@see \App\Orchid\Helpers\Base::GetInput()}.
+     *
+     * @return \Orchid\Screen\Layout[]|string[] Mảng chứa layout rows
      */
     public function layout(): iterable
     {
@@ -208,9 +307,13 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * The screen's action buttons.
+     * Các action button hiển thị trên thanh lệnh của screen.
      *
-     * @return Action[]
+     * Luôn hiển thị nút "Save". Nút "Remove" chỉ hiển thị khi đang chỉnh sửa
+     * bản ghi đã tồn tại (`$this->object->exists === true`), kèm hộp thoại
+     * xác nhận trước khi xóa.
+     *
+     * @return \Orchid\Screen\Action[] Mảng các action button
      */
     public function commandBar(): iterable
     {
@@ -228,7 +331,14 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * @return \Illuminate\Http\RedirectResponse
+     * Lưu bản ghi vào cơ sở dữ liệu.
+     *
+     * Lấy dữ liệu từ request theo key tên domain (ví dụ: `post`, `product`),
+     * fill vào `$this->object`, và gọi `save()`. Sau khi lưu thành công,
+     * hiển thị toast notification và redirect về trang danh sách.
+     *
+     * @param  Request  $request  HTTP request chứa dữ liệu form
+     * @return \Illuminate\Http\RedirectResponse Redirect về trang danh sách
      */
     public function save(Request $request)
     {
@@ -246,9 +356,13 @@ class BaseEditScreen extends BaseScreen
     }
 
     /**
-     * @throws \Exception
+     * Xóa bản ghi hiện tại khỏi cơ sở dữ liệu.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * Gọi `delete()` trên `$this->object` (soft delete nếu model hỗ trợ),
+     * hiển thị toast notification, và redirect về trang danh sách.
+     *
+     * @throws \Exception Nếu xóa thất bại
+     * @return \Illuminate\Http\RedirectResponse Redirect về trang danh sách
      */
     public function remove()
     {

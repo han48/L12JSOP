@@ -11,6 +11,21 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
+/**
+ * List layout for the Role management screen in the Orchid admin panel.
+ *
+ * Renders a table of Orchid roles with columns for name (linked to the edit
+ * screen), slug, created_at, and updated_at. Targets the "roles" data key
+ * provided by RoleListScreen.
+ *
+ * Displayed on: Admin Panel → Access Controls → Roles (RoleListScreen).
+ * Required permission: platform.systems.roles
+ *
+ * @see \App\Orchid\Screens\Role\RoleListScreen
+ * @see \Orchid\Screen\Layouts\Table
+ *
+ * Satisfies: Requirements 5.1, 14.1
+ */
 class RoleListLayout extends Table
 {
     /**

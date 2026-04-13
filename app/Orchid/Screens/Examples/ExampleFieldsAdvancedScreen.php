@@ -24,6 +24,7 @@ use Orchid\Screen\Fields\UTM;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating advanced Orchid form fields (DEV_MODE only). */
 class ExampleFieldsAdvancedScreen extends Screen
 {
     /**

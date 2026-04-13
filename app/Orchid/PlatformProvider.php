@@ -10,12 +10,54 @@ use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Support\Color;
 
+/**
+ * PlatformProvider — Orchid Admin Panel service provider.
+ *
+ * Đây là service provider trung tâm của Orchid Admin Panel, chịu trách nhiệm:
+ * - Đăng ký cấu trúc menu điều hướng cho toàn bộ admin panel
+ * - Đăng ký các quyền (permissions) cho từng module
+ *
+ * ## Cấu trúc menu
+ *
+ * ### Access Controls
+ * - **Users** — quản lý người dùng (`platform.systems.users`)
+ * - **Roles** — quản lý vai trò và quyền hạn (`platform.systems.roles`)
+ *
+ * ### Management
+ * - **SendNotification** — gửi và quản lý thông báo
+ * - **Teams** — quản lý nhóm người dùng
+ * - **UserAdditionalInformation** — thông tin bổ sung của người dùng
+ * - **Products** — quản lý sản phẩm
+ * - **Transactions** — quản lý giao dịch tài chính
+ * - **Posts** — quản lý bài viết
+ *
+ * ### DEBUG
+ * - **Telescope** — công cụ debug Laravel (`platform.systems.telescope`)
+ * - **Horizon** — quản lý queue Laravel (`platform.systems.horizon`)
+ *
+ * ## DEV_MODE
+ * Khi biến môi trường `DEV_MODE=true`, admin panel hiển thị thêm các màn hình
+ * ví dụ (example screens) và tài liệu Orchid dành cho mục đích phát triển.
+ *
+ * ## Permissions đăng ký
+ * - `platform.systems.roles` — truy cập màn hình quản lý Role
+ * - `platform.systems.users` — truy cập màn hình quản lý User
+ * - `platform.systems.telescope` — truy cập Laravel Telescope
+ * - `platform.systems.horizon` — truy cập Laravel Horizon
+ * - Các permissions từ từng Helper module (SendNotification, Team, v.v.)
+ *
+ * @see \App\Orchid\Helpers\Base
+ * @see \Orchid\Platform\OrchidServiceProvider
+ */
 class PlatformProvider extends OrchidServiceProvider
 {
     /**
      * Bootstrap the application services.
      *
-     * @param Dashboard $dashboard
+     * Khởi động Orchid Dashboard và thực hiện các thiết lập ban đầu
+     * cho admin panel thông qua lớp cha OrchidServiceProvider.
+     *
+     * @param Dashboard $dashboard Instance của Orchid Dashboard
      *
      * @return void
      */
@@ -29,7 +71,16 @@ class PlatformProvider extends OrchidServiceProvider
     /**
      * Register the application menu.
      *
-     * @return Menu[]
+     * Xây dựng và trả về mảng các menu item cho admin panel theo thứ tự:
+     * 1. Admin menu (Access Controls + Management sections)
+     * 2. Module menus từ các Helper class
+     * 3. DEBUG menu (Telescope, Horizon)
+     * 4. DEV menu (chỉ khi DEV_MODE=true)
+     *
+     * Mỗi Helper class (SendNotification, Team, v.v.) tự inject menu item
+     * của mình vào mảng thông qua phương thức `AddMenus()`.
+     *
+     * @return Menu[] Mảng các menu item cho Orchid navigation
      */
     public function menu(): array
     {
@@ -146,7 +197,18 @@ class PlatformProvider extends OrchidServiceProvider
     /**
      * Register permissions for the application.
      *
-     * @return ItemPermission[]
+     * Đăng ký tất cả các quyền (permissions) cho admin panel, được nhóm
+     * dưới nhóm "System". Bao gồm:
+     *
+     * - `platform.systems.roles` — quyền truy cập quản lý Role
+     * - `platform.systems.users` — quyền truy cập quản lý User
+     * - `platform.systems.telescope` — quyền truy cập Laravel Telescope (DEBUG)
+     * - `platform.systems.horizon` — quyền truy cập Laravel Horizon (DEBUG)
+     * - Các permissions bổ sung từ từng Helper module
+     *
+     * Mỗi Helper class tự inject permission của mình thông qua `AddPermissions()`.
+     *
+     * @return ItemPermission[] Mảng các nhóm permission cho Orchid
      */
     public function permissions(): array
     {

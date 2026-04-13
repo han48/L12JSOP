@@ -10,6 +10,31 @@ use Orchid\Screen\Contracts\Personable;
 use Orchid\Screen\Contracts\Searchable;
 use Orchid\Support\Presenter;
 
+/**
+ * Orchid presenter for the User model.
+ *
+ * Implements both Personable and Searchable contracts so that User records
+ * can be displayed as persona cards (avatar + name + subtitle) and surfaced
+ * in the Orchid global search bar.
+ *
+ * Personable interface:
+ * - title()    → user's name
+ * - subTitle() → comma-separated role names (truncated to 20 chars), or "Regular User"
+ * - url()      → link to the user's edit screen (platform.systems.users.edit)
+ * - image()    → Gravatar URL derived from the user's email address
+ *
+ * Searchable interface:
+ * - label()          → "Users" (group label shown in search results)
+ * - perSearchShow()  → 3 (max results shown per search query)
+ * - searchQuery()    → delegates to Laravel Scout's search builder on the User model
+ *
+ * @see \Orchid\Screen\Contracts\Personable
+ * @see \Orchid\Screen\Contracts\Searchable
+ * @see \Orchid\Support\Presenter
+ * @see \App\Orchid\Layouts\User\UserListLayout
+ *
+ * Satisfies: Requirements 4.1, 14.1
+ */
 class UserPresenter extends Presenter implements Personable, Searchable
 {
     /**

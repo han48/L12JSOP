@@ -5,6 +5,23 @@ namespace App\Orchid\Layouts\SendNotification;
 use App\Orchid\Layouts\BaseListLayout;
 use Orchid\Screen\Actions\Button;
 
+/**
+ * List layout for the SendNotification management screen in the Orchid admin panel.
+ *
+ * Extends BaseListLayout with a custom fixed column set that maps notification
+ * data fields (title, action, message, type, user, time) to display_* accessors
+ * on the SendNotification model. The actions column is disabled ($disableAction = true)
+ * because notifications are read-only records; only a Delete button is provided
+ * via the overridden getActions() method.
+ *
+ * Displayed on: Admin Panel → Management → SendNotification (SendNotificationListScreen).
+ * Required permission: platform.systems.send_notifications
+ *
+ * @see \App\Orchid\Layouts\BaseListLayout
+ * @see \App\Orchid\Screens\SendNotification\SendNotificationListScreen
+ *
+ * Satisfies: Requirements 12.7, 14.1
+ */
 class SendNotificationListLayout extends BaseListLayout
 {
     /**

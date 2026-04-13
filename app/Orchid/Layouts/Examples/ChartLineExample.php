@@ -6,6 +6,7 @@ namespace App\Orchid\Layouts\Examples;
 
 use Orchid\Screen\Layouts\Chart;
 
+/** Example line chart layout used in the Orchid dev/example screens (DEV_MODE only). */
 class ChartLineExample extends Chart
 {
     /**

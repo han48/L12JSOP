@@ -6,6 +6,7 @@ use Orchid\Screen\Action;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating Orchid grid system (DEV_MODE only). */
 class ExampleGridScreen extends Screen
 {
     /**

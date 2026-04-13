@@ -18,6 +18,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 
+/** Example screen demonstrating basic Orchid form fields (DEV_MODE only). */
 class ExampleFieldsScreen extends Screen
 {
     /**
