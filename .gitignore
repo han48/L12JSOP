@@ -24,3 +24,4 @@ yarn-error.log
 lang/php_*.json
 *.sqlite
 *.sqlite3
+*.bk
